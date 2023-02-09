@@ -206,6 +206,10 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                         startdate: callStartedDate,
                         enddate: callEndDate,
                         date: keys,
+
+                        created: d['Created Date'],
+                        closed: d['Close Date'],
+                        lastModified: d['Last Modified Date']
                         // status: Object.keys(taskStatus)[Math.floor(Math.random() * taskStatusKeys.length)]
                     }
                 } catch (err) { console.log("exception at key ", keys) }
@@ -269,7 +273,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     // colors for each type
     var types = [...new Set(mData.map(item => item.date))];
-    var colors = chroma.scale('Spectral').colors(types.length)
+    var colors = chroma.scale(['#8b0000','#FFCCCB']).colors(types.length)
     
     var type2color = {}
     types.forEach(function (element, index) {
@@ -335,10 +339,10 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         .attr("height", height)
     //   .attr("width", width)
     //   .attr("height", height)
-    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     var area = svg.append("g")
-        //   .attr("class", "zoom")
+        .attr("class", "zoom")
         .attr('class', 'clipped')
         .attr("width", width)
         .attr("height", height)
@@ -375,8 +379,12 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 .style("left", d3.event.pageX + "px")
                 .style("top", d3.event.pageY + "px")
                 .style("display", "inline-block")
-                .html((d.date) + "<br> from :" + d.startdate.toISOString().slice(0, 19) + "<br> to :" + d.enddate
-                    .toISOString().slice(0, 19));
+                .html(`${d.date} <br><br> 
+                        Created Date : ${d.created} <br>
+                        Closed Date : ${d.closed} <br>
+                        Last Modified Date : ${d.lastModified} <br>
+                `) 
+                
         })
         .on("mouseout", function (d) {
             tooltip.style("display", "none")
