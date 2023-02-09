@@ -1,387 +1,8 @@
-priceData = [
-    {
-        startdate: new Date("Jan 01 01:00:00 2000"),
-        enddate: new Date("Jan 12 02:00:00 2000"),
-        type: "Jan task",
-        price: 1394.46
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2000"),
-        enddate: new Date("Feb 12 12:00:00 2000"),
-        type: "Feb task",
-        price: 1366.42
-    },
-    {
-        startdate: new Date("Mar 01 00:00:00 2000"),
-        enddate: new Date("Mar 11 12:00:00 2000"),
-        type: "Mar task",
-        price: 1498.58
-    },
-    {
-        startdate: new Date("Apr 01 00:00:00 2000"),
-        enddate: new Date("Apr 05 12:00:00 2000"),
-        type: "Apr task",
-        price: 1452.43
-    },
-    {
-        startdate: new Date("May 01 00:00:00 2000"),
-        enddate: new Date("May 22 12:00:00 2000"),
-        type: "May task",
-        price: 1420.6
-    },
-    {
-        startdate: new Date("Jun 01 00:00:00 2000"),
-        enddate: new Date("Jun 15 12:00:00 2000"),
-        type: "Jun task",
-        price: 1454.6
-    },
-    {
-        startdate: new Date("Jul 01 00:00:00 2000"),
-        enddate: new Date("Jul 07 12:00:00 2000"),
-        type: "Jul task",
-        price: 1430.83
-    },
-    {
-        startdate: new Date("Aug 01 00:00:00 2000"),
-        enddate: new Date("Aug 22 12:00:00 2000"),
-        type: "Aug task",
-        price: 1517.68
-    },
-    {
-        startdate: new Date("Sep 01 00:00:00 2000"),
-        enddate: new Date("Sep 28 12:00:00 2000"),
-        type: "Sep task",
-        price: 1436.51
-    },
-    {
-        startdate: new Date("Oct 01 00:00:00 2000"),
-        enddate: new Date("Oct 22 12:00:00 2000"),
-        type: "Oct task",
-        price: 1429.4
-    },
-    {
-        startdate: new Date("Nov 01 00:00:00 2000"),
-        enddate: new Date("Nov 22 12:00:00 2000"),
-        type: "Nov task",
-        price: 1314.95
-    },
-    {
-        startdate: new Date("Dec 01 11:00:00 2000"),
-        enddate: new Date("Dec 02 12:00:00 2000"),
-        type: "Dec task",
-        price: 1320.28
-    },
-    {
-        startdate: new Date("Jan 01 00:00:00 2001"),
-        enddate: new Date("Jan 22 12:00:00 2001"),
-        type: "Jan task",
-        price: 1366.01
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2001"),
-        enddate: new Date("Feb 12 12:00:00 2001"),
-        type: "Feb task",
-        price: 1239.94
-    },
-    {
-        startdate: new Date("Mar 01 00:00:00 2001"),
-        enddate: new Date("Mar 11 12:00:00 2001"),
-        type: "Mar task",
-        price: 1160.33
-    },
-    {
-        startdate: new Date("Apr 01 00:00:00 2001"),
-        enddate: new Date("Apr 05 12:00:00 2001"),
-        type: "Apr task",
-        price: 1249.46
-    },
-    {
-        startdate: new Date("May 01 00:00:00 2001"),
-        enddate: new Date("May 22 12:00:00 2001"),
-        type: "May task",
-        price: 1255.82
-    },
-    {
-        startdate: new Date("Jun 01 00:00:00 2001"),
-        enddate: new Date("Jun 15 12:00:00 2001"),
-        type: "Jun task",
-        price: 1224.38
-    },
-    {
-        startdate: new Date("Jul 01 00:00:00 2001"),
-        enddate: new Date("Jul 07 12:00:00 2001"),
-        type: "Jul task",
-        price: 1211.23
-    },
-    {
-        startdate: new Date("Aug 01 00:00:00 2001"),
-        enddate: new Date("Aug 22 12:00:00 2001"),
-        type: "Aug task",
-        price: 1133.58
-    },
-    {
-        startdate: new Date("Sep 01 00:00:00 2001"),
-        enddate: new Date("Sep 28 12:00:00 2001"),
-        type: "Sep task",
-        price: 1040.94
-    },
-    {
-        startdate: new Date("Oct 01 00:00:00 2001"),
-        enddate: new Date("Oct 22 12:00:00 2001"),
-        type: "Oct task",
-        price: 1059.78
-    },
-    {
-        startdate: new Date("Nov 01 00:00:00 2001"),
-        enddate: new Date("Nov 22 12:00:00 2001"),
-        type: "Nov task",
-        price: 1139.45
-    },
-    {
-        startdate: new Date("Dec 01 00:00:00 2001"),
-        enddate: new Date("Dec 22 12:00:00 2001"),
-        type: "Dec task",
-        price: 1148.08
-    },
-    {
-        startdate: new Date("Jan 01 00:00:00 2002"),
-        enddate: new Date("Jan 22 12:00:00 2002"),
-        type: "Jan task",
-        price: 1130.2
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2002"),
-        enddate: new Date("Feb 12 12:00:00 2002"),
-        type: "Feb task",
-        price: 1106.73
-    },
-    {
-        startdate: new Date("Mar 01 00:00:00 2002"),
-        enddate: new Date("Mar 11 12:00:00 2002"),
-        type: "Mar task",
-        price: 1147.39
-    },
-    {
-        startdate: new Date("Apr 01 00:00:00 2002"),
-        enddate: new Date("Apr 05 12:00:00 2002"),
-        type: "Apr task",
-        price: 1076.92
-    },
-    {
-        startdate: new Date("May 01 00:00:00 2002"),
-        enddate: new Date("May 22 12:00:00 2002"),
-        type: "May task",
-        price: 1067.14
-    },
-    {
-        startdate: new Date("Jun 01 00:00:00 2002"),
-        enddate: new Date("Jun 15 12:00:00 2002"),
-        type: "Jun task",
-        price: 989.82
-    },
-    {
-        startdate: new Date("Jul 01 00:00:00 2002"),
-        enddate: new Date("Jul 07 12:00:00 2002"),
-        type: "Jul task",
-        price: 911.62
-    },
-    {
-        startdate: new Date("Aug 01 00:00:00 2002"),
-        enddate: new Date("Aug 22 12:00:00 2002"),
-        type: "Aug task",
-        price: 916.07
-    },
-    {
-        startdate: new Date("Sep 01 00:00:00 2002"),
-        enddate: new Date("Sep 28 12:00:00 2002"),
-        type: "Sep task",
-        price: 815.28
-    },
-    {
-        startdate: new Date("Oct 01 00:00:00 2002"),
-        enddate: new Date("Oct 22 12:00:00 2002"),
-        type: "Oct task",
-        price: 885.76
-    },
-    {
-        startdate: new Date("Nov 01 00:00:00 2002"),
-        enddate: new Date("Nov 22 12:00:00 2002"),
-        type: "Nov task",
-        price: 936.31
-    },
-    {
-        startdate: new Date("Dec 01 00:00:00 2002"),
-        enddate: new Date("Dec 22 12:00:00 2002"),
-        type: "Dec task",
-        price: 879.82
-    },
-    {
-        startdate: new Date("Jan 01 00:00:00 2003"),
-        enddate: new Date("Jan 22 12:00:00 2003"),
-        type: "Jan task",
-        price: 855.7
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2003"),
-        enddate: new Date("Feb 12 12:00:00 2003"),
-        type: "Feb task",
-        price: 841.15
-    },
-    {
-        startdate: new Date("Mar 01 00:00:00 2003"),
-        enddate: new Date("Mar 11 12:00:00 2003"),
-        type: "Mar task",
-        price: 848.18
-    },
-    {
-        startdate: new Date("Apr 01 00:00:00 2003"),
-        enddate: new Date("Apr 05 12:00:00 2003"),
-        type: "Apr task",
-        price: 916.92
-    },
-    {
-        startdate: new Date("May 01 00:00:00 2003"),
-        enddate: new Date("May 22 12:00:00 2003"),
-        type: "May task",
-        price: 963.59
-    },
-    {
-        startdate: new Date("Jun 01 00:00:00 2003"),
-        enddate: new Date("Jun 15 12:00:00 2003"),
-        type: "Jun task",
-        price: 974.5
-    },
-    {
-        startdate: new Date("Jul 01 00:00:00 2003"),
-        enddate: new Date("Jul 07 12:00:00 2003"),
-        type: "Jul task",
-        price: 990.31
-    },
-    {
-        startdate: new Date("Aug 01 00:00:00 2003"),
-        enddate: new Date("Aug 22 12:00:00 2003"),
-        type: "Aug task",
-        price: 1008.01
-    },
-    {
-        startdate: new Date("Sep 01 00:00:00 2003"),
-        enddate: new Date("Sep 28 12:00:00 2003"),
-        type: "Sep task",
-        price: 995.97
-    },
-    {
-        startdate: new Date("Oct 01 00:00:00 2003"),
-        enddate: new Date("Oct 22 12:00:00 2003"),
-        type: "Oct task",
-        price: 1050.71
-    },
-    {
-        startdate: new Date("Nov 01 00:00:00 2003"),
-        enddate: new Date("Nov 22 12:00:00 2003"),
-        type: "Nov task",
-        price: 1058.2
-    },
-    {
-        startdate: new Date("Dec 01 00:00:00 2003"),
-        enddate: new Date("Dec 22 12:00:00 2003"),
-        type: "Dec task",
-        price: 1111.92
-    },
-    {
-        startdate: new Date("Jan 01 00:00:00 2004"),
-        enddate: new Date("Jan 22 12:00:00 2004"),
-        type: "Jan task",
-        price: 1131.13
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2004"),
-        enddate: new Date("Feb 12 12:00:00 2004"),
-        type: "Feb task",
-        price: 1144.94
-    },
-    {
-        startdate: new Date("Mar 01 00:00:00 2004"),
-        enddate: new Date("Mar 11 12:00:00 2004"),
-        type: "Mar task",
-        price: 1126.21
-    },
-    {
-        startdate: new Date("Apr 01 00:00:00 2004"),
-        enddate: new Date("Apr 05 12:00:00 2004"),
-        type: "Apr task",
-        price: 1107.3
-    },
-    {
-        startdate: new Date("May 01 00:00:00 2004"),
-        enddate: new Date("May 22 12:00:00 2004"),
-        type: "May task",
-        price: 1120.68
-    },
-    {
-        startdate: new Date("Jun 01 00:00:00 2004"),
-        enddate: new Date("Jun 15 12:00:00 2004"),
-        type: "Jun task",
-        price: 1140.84
-    },
-    {
-        startdate: new Date("Jul 01 00:00:00 2004"),
-        enddate: new Date("Jul 07 12:00:00 2004"),
-        type: "Jul task",
-        price: 1101.72
-    },
-    {
-        startdate: new Date("Aug 01 00:00:00 2004"),
-        enddate: new Date("Aug 22 12:00:00 2004"),
-        type: "Aug task",
-        price: 1104.24
-    },
-    {
-        startdate: new Date("Sep 01 00:00:00 2004"),
-        enddate: new Date("Sep 28 12:00:00 2004"),
-        type: "Sep task",
-        price: 1114.58
-    },
-    {
-        startdate: new Date("Oct 01 00:00:00 2004"),
-        enddate: new Date("Oct 22 12:00:00 2004"),
-        type: "Oct task",
-        price: 1130.2
-    },
-    {
-        startdate: new Date("Nov 01 00:00:00 2004"),
-        enddate: new Date("Nov 22 12:00:00 2004"),
-        type: "Nov task",
-        price: 1173.82
-    },
-    {
-        startdate: new Date("Dec 01 00:00:00 2004"),
-        enddate: new Date("Dec 22 12:00:00 2004"),
-        type: "Dec task",
-        price: 1211.92
-    },
-    {
-        startdate: new Date("Jan 01 00:00:00 2005"),
-        enddate: new Date("Jan 22 12:00:00 2005"),
-        type: "Jan task",
-        price: 1181.27
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2005"),
-        enddate: new Date("Feb 12 12:00:00 2005"),
-        type: "Feb task",
-        price: 1203.6
-    },
-    {
-        startdate: new Date("Feb 01 00:00:00 2007"),
-        enddate: new Date("Feb 12 12:00:00 2007"),
-        type: "Feb task",
-        price: 1203.6
-    }
-]
+
 
 // To get the event positio05
 var keyFunction = function (d) {
-    return d.startdate + d.type;
+    return d.startdate + d.date;
 }
 
 var svg = d3.select("svg")
@@ -459,7 +80,7 @@ const momentTimeFormat = (y, d) => {
         var secs = time.match(/:(\d+):(\d+)/)[2];
         var AMPM = time.match(/\s(.*)$/)[1];
         if ((AMPM === "PM" || AMPM === "pm") && hours < 12) hours = hours + 12;
-        if ((AMPM === "AM" || AMPM === "pm") && hours === 12) hours = hours - 12;
+        if ((AMPM === "AM" || AMPM === "am") && hours === 12) hours = hours - 12;
         var sHours = hours.toString();
         var sMinutes = minutes.toString();
         var sSecs = secs.toString();
@@ -575,6 +196,10 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 // console.log("call start ", callStartedDate)
                 let callEndDate = momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0])
 
+                console.log("finding err start dates", callStartedDate)
+                console.log("finding err end dates", callEndDate)
+                console.log("finding ------------------------------------------------------------")
+
                 try {
                     // console.warn("time formt err ", timeFormtAmPM.exec(d[keys])[0] === '' && keys)
                     return {
@@ -626,9 +251,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
 
     var x = d3.scaleTime()
-        .domain([d3.min(priceData, function (d) {
+        .domain([d3.min(mData, function (d) {
             return d.startdate;
-        }), d3.max(priceData, function (d) {
+        }), d3.max(mData, function (d) {
             return d.enddate;
         })])
         .range([0, width]),
@@ -637,18 +262,21 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         y2 = d3.scaleLinear().range([height2, 0]);
 
     var y = d3.scaleBand()
-        .domain(priceData.map(function (entry) {
-            return entry.type;
+        .domain(mData.map(function (entry) {
+            return entry.date;
         }))
         .rangeRound([height, 0])
 
     // colors for each type
-    var types = [...new Set(priceData.map(item => item.type))];
+    var types = [...new Set(mData.map(item => item.date))];
     var colors = chroma.scale('Spectral').colors(types.length)
+    
     var type2color = {}
     types.forEach(function (element, index) {
         type2color[element] = colors[index]
     });
+    console.log("type 2 ", type2color)
+
     /*var y = d3.scale.ordinal()
             .domain(data.map(function(entry){
                 return entry.key;
@@ -662,7 +290,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     //     .padding(0.1);      
 
     var rectTransform = function (d) {
-        return "translate(" + x(d.startdate) + "," + y(d.type) + ")";
+        return "translate(" + x(d.startdate) + "," + y(d.date) + ")";
     };
 
     var xAxis = d3.axisBottom(x),
@@ -723,7 +351,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     area.selectAll(".circle")
-        .data(priceData, keyFunction).enter()
+        .data(mData, keyFunction).enter()
         .append("rect")
         //.attr('clip-path', 'url(#clip)')
         .attr("rx", 5)
@@ -735,17 +363,19 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             return y.bandwidth();
         })
         .attr("width", function (d) {
+            // console.log("negatives ", x(d.enddate) - x(d.startdate))
+            console.log("negatives ", d.enddate, d.startdate)
             return (x(d.enddate) - x(d.startdate))
         })
         .style("fill", function (d) {
-            return type2color[d.type]
+            return type2color[d.date]
         })
         .on("mouseover", function (d) {
             tooltip
                 .style("left", d3.event.pageX + "px")
                 .style("top", d3.event.pageY + "px")
                 .style("display", "inline-block")
-                .html((d.type) + "<br> from :" + d.startdate.toISOString().slice(0, 19) + "<br> to :" + d.enddate
+                .html((d.date) + "<br> from :" + d.startdate.toISOString().slice(0, 19) + "<br> to :" + d.enddate
                     .toISOString().slice(0, 19));
         })
         .on("mouseout", function (d) {
@@ -767,7 +397,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-    var data = priceData
+    // var data = priceData
 
     //   x.domain(d3.extent(data, function(d) { return d.date; }));
     //   y.domain([0, d3.max(data, function(d) { return d.price; })]);
