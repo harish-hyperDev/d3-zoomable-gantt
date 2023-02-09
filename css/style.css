@@ -1,3 +1,7 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .area {
     fill: steelblue;
     clip-path: url(#clip);
@@ -41,7 +45,7 @@ div.tooltip {
 }
 
 .axis text {
-    font: 10px sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .axis line,
@@ -63,7 +67,7 @@ div.tooltip {
 }
 
 svg {
-    font: 10px sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .overlay {

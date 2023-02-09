@@ -180,14 +180,17 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
             // console.log(keys.match(dateRegEx))
             // if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
-            if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
+            // if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
+            if (dateRegEx.test(keys) && dateParse(keys) !== null) {
 
                 /* console.log("extract ", keys + ' ' + timeFormtAmPM.exec(d[keys])[0])
                 console.log("extracted full date ", dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0])) */
 
-                console.log("duration reg ", durationRegEx.exec(d[keys])[0])
+                // console.log("duration reg ", durationRegEx.exec(d[keys])[0])
                 // console.log("inside keys ", keys)
 
+                console.log(keys)
+                console.log(d[keys])
 
                 console.warn(dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0]), "\n", momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0]))
 
@@ -200,12 +203,23 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 console.log("finding err end dates", callEndDate)
                 console.log("finding ------------------------------------------------------------")
 
+                console.log('sage ', d['SageCRMid'])
                 try {
                     // console.warn("time formt err ", timeFormtAmPM.exec(d[keys])[0] === '' && keys)
                     return {
                         startdate: callStartedDate,
                         enddate: callEndDate,
                         date: keys,
+                        accountId: d['Account ID'],
+                        amount: d['Total Amount (Required)'],
+                        quantity: d['Quantity'],
+
+                        duration: durationRegEx.exec(d[keys])[0],
+                        sageCRMid: d['SageCRMid'],
+                        stage: d['Stage'],
+
+                        oppurtunityOwner: d['Opportunity Owner'],
+                        oppurtunityId: d['Opportunity ID'],
 
                         created: d['Created Date'],
                         closed: d['Close Date'],
@@ -378,13 +392,23 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             tooltip
                 .style("left", d3.event.pageX + "px")
                 .style("top", d3.event.pageY + "px")
+                .style("padding","5px")
                 .style("display", "inline-block")
                 .html(`${d.date} <br><br> 
+                        Call Duration : ${d.duration} <br>
+                        Oppurtunity Owner : ${d.oppurtunityOwner} <br>
+                        Opportunity ID : ${d.oppurtunityId} <br>
+                        Stage : ${d.stage} <br>
+                        SageCRMid : ${d.sageCRMid} <br>
+                        <br>
+                        Account ID : ${d.accountId} <br>
+                        Total Amount (Required) : ${d.amount} <br>
+                        <br>
                         Created Date : ${d.created} <br>
                         Closed Date : ${d.closed} <br>
                         Last Modified Date : ${d.lastModified} <br>
-                `) 
-                
+                        <br>
+                `)
         })
         .on("mouseout", function (d) {
             tooltip.style("display", "none")
