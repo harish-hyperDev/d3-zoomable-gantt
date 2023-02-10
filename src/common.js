@@ -1,3 +1,6 @@
+$(document).ready(function () {
+    $('.js-example-basic-multiple').select2();
+});
 
 
 // To get the event positio05
@@ -48,7 +51,7 @@ const momentTimeFormat = (y, d) => {
     let a = moment(y).format("hh:mm:ss a")
     // let ampm = a.substring(0,a.length - 3)
 
-    console.log("jsut a ", a)
+    console.log("just a ", a)
     let a24 = convertTime12To24(a)
     // let a24 = convertTime12To24("3:25:01 PM")
     console.log("a24 ", a24)
@@ -181,7 +184,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             // console.log(keys.match(dateRegEx))
             // if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
             // if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
-            if (dateRegEx.test(keys) && dateParse(keys) !== null) {
+            if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
 
                 /* console.log("extract ", keys + ' ' + timeFormtAmPM.exec(d[keys])[0])
                 console.log("extracted full date ", dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0])) */
@@ -192,18 +195,20 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 console.log(keys)
                 console.log(d[keys])
 
-                console.warn(dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0]), "\n", momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0]))
+                // console.warn(dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0]), "\n", momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0]))
 
                 // don't remove these variables!!
                 let callStartedDate = dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0])
                 // console.log("call start ", callStartedDate)
                 let callEndDate = momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0])
 
-                console.log("finding err start dates", callStartedDate)
-                console.log("finding err end dates", callEndDate)
-                console.log("finding ------------------------------------------------------------")
+                // console.log("finding err start dates", callStartedDate)
+                // console.log("finding err end dates", callEndDate)
+                // console.log("finding ------------------------------------------------------------")
 
                 console.log('sage ', d['SageCRMid'])
+                console.log("closed ", new Date(moment(d["Close Date"]).format("DD/MM/YYYY")))
+                console.log("started ", d["Created Date"])
                 try {
                     // console.warn("time formt err ", timeFormtAmPM.exec(d[keys])[0] === '' && keys)
                     return {
@@ -233,6 +238,41 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         }).filter(k => k)
     })
 
+    function getSelectedValues() {
+        var dropDownn = document.getElementById('dropdown'), countryArray = [], i;
+        for (i = 0; i < dropDownn.options.length ; i += 1) {
+            if (dropDownn.options[i].selected) {
+                //countryArray.push( dropDown.options[i].value); //If you need only values 
+                countryArray.push({ Name: dropDownn.options[i].text, Value: dropDownn.options[i].value });
+            }
+        }
+        console.log("country",countryArray);
+        return false;
+    }
+
+    function getValue(select) {
+        var result = [];
+        var options = select && select.options;
+
+        var s = $("select")
+        console.log("select ", s)
+        console.log("options ", options)
+        var opt;
+
+        for (var i = 0; i < options.length; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                result.push(opt.value || opt.text);
+            }
+        }
+
+        console.log("get dropdown ", result)
+        // return result;
+    }
+
+
+
     // console.warn("inner ")
     let one = filterCallsByDate.filter(outer => {
         return outer.map(inner => { return inner })
@@ -257,7 +297,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     var mData = reducer;
 
     // console.log(reducer)
-    
+
 
     console.log("\n calls \n\n", filterCallsByDate)
     // console.log("\n one \n\n", one)
@@ -287,8 +327,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     // colors for each type
     var types = [...new Set(mData.map(item => item.date))];
-    var colors = chroma.scale(['#8b0000','#FFCCCB']).colors(types.length)
-    
+    var colors = chroma.scale(['#8b0000', '#FFCCCB']).colors(types.length)
+
     var type2color = {}
     types.forEach(function (element, index) {
         type2color[element] = colors[index]
@@ -351,9 +391,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         .append("rect")
         .attr("width", width)
         .attr("height", height)
-    //   .attr("width", width)
-    //   .attr("height", height)
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        //   .attr("width", width)
+        //   .attr("height", height)
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     var area = svg.append("g")
         .attr("class", "zoom")
@@ -382,7 +422,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         })
         .attr("width", function (d) {
             // console.log("negatives ", x(d.enddate) - x(d.startdate))
-            console.log("negatives ", d.enddate, d.startdate)
+            // console.log("negatives ", d.enddate, d.startdate)
             return (x(d.enddate) - x(d.startdate))
         })
         .style("fill", function (d) {
@@ -392,7 +432,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             tooltip
                 .style("left", d3.event.pageX + "px")
                 .style("top", d3.event.pageY + "px")
-                .style("padding","5px")
+                .style("padding", "5px")
                 .style("display", "inline-block")
                 .html(`${d.date} <br><br> 
                         Call Duration : ${d.duration} <br>
@@ -496,4 +536,37 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
     }
 
+    function removeDuplicates(arr) {
+        return arr.filter((item,
+            index) => arr.indexOf(item) === index);
+    }
+
+    let mids = removeDuplicates(reducer.map(d => d['sageCRMid']))
+    console.log("mids ", mids)
+
+    var dropDown = d3.select(".dropdown")
+    var options = dropDown.selectAll("option")
+        .data(() => mids)
+
+        .enter()
+        .append("option")
+
+    options.text((d) => d)
+        .attr("value", (d) => d)
+    svg.attr('transform', 'translate(0,50)')
+
+    // console.log("jq ", )
+
+    $('.js-example-basic-multiple').on("change", function (ev) {
+        console.log("jq ", $('.js-example-basic-multiple').val()) 
+    })
+    console.log("jq ", $('#dropdown'))
+
+    $("#dropdown").on("select2-close", function(e) {
+        console.log("data ", e.choice)
+    })
+    // dropDown.on("change", getSelectedValues)
+
+    /* d3.select(".dropdown")
+        .attr("transform", "translate(0,-100)") */
 })
