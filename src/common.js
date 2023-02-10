@@ -331,6 +331,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         } 
         else twoReducer = []
 
+        if(!twoReducer.length)
+            twoReducer = reducer
+            
         console.log("\n two way reducer \n\n", twoReducer)
         console.log("param ", param)
 
