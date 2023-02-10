@@ -87,10 +87,10 @@ svg {
     pointer-events: all;
 }
 
-.dropdown {
-    padding: 10px;
-    margin: 10px;
-    margin-left: 50px;
+#dropdown {
+    padding: 10px !important;
+    margin: 10px !important;
+    margin-left: 50px !important;
 }
 
 option {

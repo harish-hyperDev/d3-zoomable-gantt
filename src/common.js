@@ -240,13 +240,13 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     function getSelectedValues() {
         var dropDownn = document.getElementById('dropdown'), countryArray = [], i;
-        for (i = 0; i < dropDownn.options.length ; i += 1) {
+        for (i = 0; i < dropDownn.options.length; i += 1) {
             if (dropDownn.options[i].selected) {
                 //countryArray.push( dropDown.options[i].value); //If you need only values 
                 countryArray.push({ Name: dropDownn.options[i].text, Value: dropDownn.options[i].value });
             }
         }
-        console.log("country",countryArray);
+        console.log("country", countryArray);
         return false;
     }
 
@@ -294,147 +294,175 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     reducer = reducer.filter(k => k)
 
+    var twoReducer = []
+
+    if($('.js-example-basic-multiple').val().length > 0) {
+        console.log("jq dropdown")
+
+    }
+
     var mData = reducer;
-
     // console.log(reducer)
-
 
     console.log("\n calls \n\n", filterCallsByDate)
     // console.log("\n one \n\n", one)
     console.log("\n reducer \n\n", reducer)
+    
     // console.log("\n filtered \n\n", filteredData)
 
 
 
+    function reDraw(param) {
+        
+        console.log(param)
+        if(param) {
+            if(param.length !== 0) {
+                twoReducer = []
+                reducer.map(d => {
+                    // d['sageCRMid']
+                    return param.forEach((p,i) => {
+                        if(p === d['sageCRMid'])
+                            twoReducer.push(d)
+                    }) 
+                })
+                console.log("two way red ", twoReducer)
+            } 
+            else twoReducer = [] 
+        } 
+        else twoReducer = []
 
+        console.log("\n two way reducer \n\n", twoReducer)
+        console.log("param ", param)
 
-    var x = d3.scaleTime()
-        .domain([d3.min(mData, function (d) {
-            return d.startdate;
-        }), d3.max(mData, function (d) {
-            return d.enddate;
-        })])
-        .range([0, width]),
-        x2 = d3.scaleTime().range([0, width]),
-        // y = d3.scaleOrdinal().range([height, 0]),
-        y2 = d3.scaleLinear().range([height2, 0]);
+        // svg.selectAll('g')
 
-    var y = d3.scaleBand()
-        .domain(mData.map(function (entry) {
-            return entry.date;
-        }))
-        .rangeRound([height, 0])
+        var x = d3.scaleTime()
+            .domain([d3.min(mData, function (d) {
+                return d.startdate;
+            }), d3.max(mData, function (d) {
+                return d.enddate;
+            })])
+            .range([0, width]),
+            x2 = d3.scaleTime().range([0, width]),
+            // y = d3.scaleOrdinal().range([height, 0]),
+            y2 = d3.scaleLinear().range([height2, 0]);
 
-    // colors for each type
-    var types = [...new Set(mData.map(item => item.date))];
-    var colors = chroma.scale(['#8b0000', '#FFCCCB']).colors(types.length)
-
-    var type2color = {}
-    types.forEach(function (element, index) {
-        type2color[element] = colors[index]
-    });
-    console.log("type 2 ", type2color)
-
-    /*var y = d3.scale.ordinal()
-            .domain(data.map(function(entry){
-                return entry.key;
+        var y = d3.scaleBand()
+            .domain(mData.map(function (entry) {
+                return entry.date;
             }))
-            .rangeBands([0, height]);*/
-    // var y = d3.scaleBand()
-    //         .domain(data.map(function(entry){
-    //             return entry.key;
-    //         }))
-    //     .rangeRound([0, height])
-    //     .padding(0.1);      
+            .rangeRound([height, 0])
 
-    var rectTransform = function (d) {
-        return "translate(" + x(d.startdate) + "," + y(d.date) + ")";
-    };
+        // colors for each type
+        var types = [...new Set(mData.map(item => item.date))];
+        var colors = chroma.scale(['#8b0000', '#FFCCCB']).colors(types.length)
 
-    var xAxis = d3.axisBottom(x),
-        xAxis2 = d3.axisBottom(x2),
-        yAxis = d3.axisLeft(y).tickSize(0);
+        var type2color = {}
+        types.forEach(function (element, index) {
+            type2color[element] = colors[index]
+        });
+        console.log("type 2 ", type2color)
 
-    var brush = d3.brushX()
-        .extent([
-            [0, height2 - 50],
-            [width, height2]
-        ])
-        .on("brush end", brushed);
+        /*var y = d3.scale.ordinal()
+                .domain(data.map(function(entry){
+                    return entry.key;
+                }))
+                .rangeBands([0, height]);*/
+        // var y = d3.scaleBand()
+        //         .domain(data.map(function(entry){
+        //             return entry.key;
+        //         }))
+        //     .rangeRound([0, height])
+        //     .padding(0.1);      
 
-    var zoom = d3.zoom()
-        .scaleExtent([1, Infinity])
-        .translateExtent([
-            [0, 0],
-            [width, height]
-        ])
-        .extent([
-            [0, 0],
-            [width, height]
-        ])
-        .on("zoom", zoomed);
+        var rectTransform = function (d) {
+            return "translate(" + x(d.startdate) + "," + y(d.date) + ")";
+        };
 
-    // var area = d3.area()
-    //     .curve(d3.curveMonotoneX)
-    //     .x(function(d) { return x(d.date); })
-    //     .y0(height)
-    //     .y1(function(d) { return y(d.price); });
-    svg.append("rect")
-        .attr("class", "zoom")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(zoom);
+        var xAxis = d3.axisBottom(x),
+            xAxis2 = d3.axisBottom(x2),
+            yAxis = d3.axisLeft(y).tickSize(0);
 
-    svg.append("defs").append("clipPath")
-        .attr("id", "clip")
-        .append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        //   .attr("width", width)
-        //   .attr("height", height)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        var brush = d3.brushX()
+            .extent([
+                [0, height2 - 50],
+                [width, height2]
+            ])
+            .on("brush end", brushed);
 
-    var area = svg.append("g")
-        .attr("class", "zoom")
-        .attr('class', 'clipped')
-        .attr("width", width)
-        .attr("height", height)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var zoom = d3.zoom()
+            .scaleExtent([1, Infinity])
+            .translateExtent([
+                [0, 0],
+                [width, height]
+            ])
+            .extent([
+                [0, 0],
+                [width, height]
+            ])
+            .on("zoom", zoomed);
+
+        // var area = d3.area()
+        //     .curve(d3.curveMonotoneX)
+        //     .x(function(d) { return x(d.date); })
+        //     .y0(height)
+        //     .y1(function(d) { return y(d.price); });
+        svg.append("rect")
+            .attr("class", "zoom")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .call(zoom);
+
+        svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            //   .attr("width", width)
+            //   .attr("height", height)
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+        var area = svg.append("g")
+            .attr("class", "zoom")
+            .attr('class', 'clipped')
+            .attr("width", width)
+            .attr("height", height)
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-    var focus = svg.append("g")
-        .attr("class", "focus")
-        // .attr('clip-path', 'url(#clip)')
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var focus = svg.append("g")
+            .attr("class", "focus")
+            // .attr('clip-path', 'url(#clip)')
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    area.selectAll(".circle")
-        .data(mData, keyFunction).enter()
-        .append("rect")
-        //.attr('clip-path', 'url(#clip)')
-        .attr("rx", 5)
-        .attr("ry", 5)
-        .attr("class", "circle")
-        .attr("y", 0)
-        .attr("transform", rectTransform)
-        .attr("height", function (d) {
-            return y.bandwidth();
-        })
-        .attr("width", function (d) {
-            // console.log("negatives ", x(d.enddate) - x(d.startdate))
-            // console.log("negatives ", d.enddate, d.startdate)
-            return (x(d.enddate) - x(d.startdate))
-        })
-        .style("fill", function (d) {
-            return type2color[d.date]
-        })
-        .on("mouseover", function (d) {
-            tooltip
-                .style("left", d3.event.pageX + "px")
-                .style("top", d3.event.pageY + "px")
-                .style("padding", "5px")
-                .style("display", "inline-block")
-                .html(`${d.date} <br><br> 
+        area.selectAll(".circle")
+            .data(mData, keyFunction).enter()
+            .append("rect")
+            //.attr('clip-path', 'url(#clip)')
+            .attr("rx", 5)
+            .attr("ry", 5)
+            .attr("class", "circle")
+            .attr("y", 0)
+            .attr("transform", rectTransform)
+            .attr("height", function (d) {
+                return y.bandwidth();
+            })
+            .attr("width", function (d) {
+                // console.log("negatives ", x(d.enddate) - x(d.startdate))
+                // console.log("negatives ", d.enddate, d.startdate)
+                return (x(d.enddate) - x(d.startdate))
+            })
+            .style("fill", function (d) {
+                return type2color[d.date]
+            })
+            .on("mouseover", function (d) {
+                tooltip
+                    .style("left", d3.event.pageX + "px")
+                    .style("top", d3.event.pageY + "px")
+                    .style("padding", "5px")
+                    .style("display", "inline-block")
+                    .html(`${d.date} <br><br> 
                         Call Duration : ${d.duration} <br>
                         Oppurtunity Owner : ${d.oppurtunityOwner} <br>
                         Opportunity ID : ${d.oppurtunityId} <br>
@@ -449,122 +477,135 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                         Last Modified Date : ${d.lastModified} <br>
                         <br>
                 `)
-        })
-        .on("mouseout", function (d) {
-            tooltip.style("display", "none")
-        });
-
-    var area2 = d3.area()
-        .curve(d3.curveMonotoneX)
-        .x(function (d) {
-            return x2(d.startdate);
-        })
-        .y0(height2)
-        .y1(function (d) {
-            return y2(d.price);
-        });
-
-
-    var context = svg.append("g")
-        .attr("class", "context")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-    // var data = priceData
-
-    //   x.domain(d3.extent(data, function(d) { return d.date; }));
-    //   y.domain([0, d3.max(data, function(d) { return d.price; })]);
-    x2.domain(x.domain());
-    y2.domain(y.domain());
-
-    //   focus.append("path")
-    //       .datum(data)
-    //       .attr("class", "area")
-    //       .attr("d", area);
-
-    focus.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-    focus.append("g")
-        .attr("class", "axis axis--y")
-        .call(yAxis);
-
-    context.append("path")
-        .datum(data)
-        .attr("class", "area")
-        .attr("d", area2);
-
-    context.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis2);
-
-    context.append("g")
-        .attr("class", "brush")
-        .call(brush)
-        .call(brush.move, x.range());
-
-
-
-
-    function brushed() {
-        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
-        var s = d3.event.selection || x2.range();
-        x.domain(s.map(x2.invert, x2));
-        area.selectAll(".circle").attr("transform", rectTransform)
-            .attr("width", function (d) {
-                return (x(d.enddate) - x(d.startdate))
             })
-        //   focus.select(".focus").attr("d", focus);
-        focus.select(".axis--x").call(xAxis);
-        svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-            .scale(width / (s[1] - s[0]))
-            .translate(-s[0], 0));
-    }
+            .on("mouseout", function (d) {
+                tooltip.style("display", "none")
+            });
 
-    function zoomed() {
-        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
-        var t = d3.event.transform;
-        x.domain(t.rescaleX(x2).domain());
-        area.selectAll(".circle").attr("transform", rectTransform)
-            .attr("width", function (d) {
-                return (x(d.enddate) - x(d.startdate))
+        var area2 = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function (d) {
+                return x2(d.startdate);
             })
-        //   focus.select(".area").attr("d", area);
-        focus.select(".axis--x").call(xAxis);
-        context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+            .y0(height2)
+            .y1(function (d) {
+                return y2(d.price);
+            });
+
+
+        var context = svg.append("g")
+            .attr("class", "context")
+            .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+        // var data = priceData
+
+        //   x.domain(d3.extent(data, function(d) { return d.date; }));
+        //   y.domain([0, d3.max(data, function(d) { return d.price; })]);
+        x2.domain(x.domain());
+        y2.domain(y.domain());
+
+        //   focus.append("path")
+        //       .datum(data)
+        //       .attr("class", "area")
+        //       .attr("d", area);
+
+        focus.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        focus.append("g")
+            .attr("class", "axis axis--y")
+            .call(yAxis);
+
+        context.append("path")
+            .datum(data)
+            .attr("class", "area")
+            .attr("d", area2);
+
+        context.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis2);
+
+        context.append("g")
+            .attr("class", "brush")
+            .call(brush)
+            .call(brush.move, x.range());
+
+
+
+
+        function brushed() {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+            var s = d3.event.selection || x2.range();
+            x.domain(s.map(x2.invert, x2));
+            area.selectAll(".circle").attr("transform", rectTransform)
+                .attr("width", function (d) {
+                    return (x(d.enddate) - x(d.startdate))
+                })
+            //   focus.select(".focus").attr("d", focus);
+            focus.select(".axis--x").call(xAxis);
+            svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(width / (s[1] - s[0]))
+                .translate(-s[0], 0));
+        }
+
+        function zoomed() {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+            var t = d3.event.transform;
+            x.domain(t.rescaleX(x2).domain());
+            area.selectAll(".circle").attr("transform", rectTransform)
+                .attr("width", function (d) {
+                    return (x(d.enddate) - x(d.startdate))
+                })
+            //   focus.select(".area").attr("d", area);
+            focus.select(".axis--x").call(xAxis);
+            context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+        }
+
+        function removeDuplicates(arr) {
+            return arr.filter((item,
+                index) => arr.indexOf(item) === index);
+        }
+
+        let mids = removeDuplicates(reducer.map(d => d['sageCRMid']))
+        console.log("mids ", mids)
+
+        var dropDown = d3.select(".dropdown")
+        var options = dropDown.selectAll("option")
+            .data(() => mids)
+
+            .enter()
+            .append("option")
+
+        options.text((d) => d)
+            .attr("value", (d) => d)
+        svg.attr('transform', 'translate(0,50)')
+
+        // console.log("svg sel2 ", svg.selectAll('g').remove())
     }
-
-    function removeDuplicates(arr) {
-        return arr.filter((item,
-            index) => arr.indexOf(item) === index);
-    }
-
-    let mids = removeDuplicates(reducer.map(d => d['sageCRMid']))
-    console.log("mids ", mids)
-
-    var dropDown = d3.select(".dropdown")
-    var options = dropDown.selectAll("option")
-        .data(() => mids)
-
-        .enter()
-        .append("option")
-
-    options.text((d) => d)
-        .attr("value", (d) => d)
-    svg.attr('transform', 'translate(0,50)')
 
     // console.log("jq ", )
 
     $('.js-example-basic-multiple').on("change", function (ev) {
-        console.log("jq ", $('.js-example-basic-multiple').val()) 
-    })
-    console.log("jq ", $('#dropdown'))
+        console.log("jq ", $('.js-example-basic-multiple').val())
 
-    $("#dropdown").on("select2-close", function(e) {
-        console.log("data ", e.choice)
+        svg.selectAll('g').remove()
+        // removeChart();
+        reDraw($('.js-example-basic-multiple').val());
     })
+
+    $('.js-example-basic-multiple')
+    // console.log("jq ", $('#dropdown'))
+
+    
+
+    /* $(document).ready(function () {
+        reDraw();
+    }); */
+    reDraw();
+    
     // dropDown.on("change", getSelectedValues)
 
     /* d3.select(".dropdown")
