@@ -327,7 +327,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         
         //logic to store the whole data of object on matching SageCRMid
 
-        console.log(param)
+        console.log("param ", param)
         if(param) {
             if(param.length !== 0) {
                 twoReducer = []
@@ -344,18 +344,11 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         } 
         else twoReducer = []
 
-        if(twoReducer.length) {
-            console.log("mod twoReducer ", twoReducer)
-            // console.log(twoReducer)
+        if(twoReducer.length)       // if twoReducer IS NOT empty
             chartData = twoReducer
-        }
-
+        else                        // if twoReducer IS empty
+            chartData = reducer
         
-            
-        
-        console.log("param ", param)
-
-        // svg.selectAll('g')
 
         var x = d3.scaleTime()
             .domain([d3.min(chartData, function (d) {
