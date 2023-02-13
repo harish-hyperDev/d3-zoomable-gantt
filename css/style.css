@@ -87,11 +87,31 @@ svg {
     pointer-events: all;
 }
 
-#dropdown {
+/* #dropdown {
     padding: 10px !important;
     margin: 10px !important;
     margin-left: 50px !important;
+} */
+
+.select2-selection {
+    min-width: 225px;
+
+    padding: 5px !important;
+    padding-bottom: 8px !important;
+
+    margin: 10px 0px 0px 50px !important;
 }
+
+.select2-dropdown {
+    min-width: 225px;
+    margin-left: 50px !important; 
+}
+
+/* .select2-selection::after {
+    content : "Select SageCRMid(s)";
+    opacity: 0.5;
+} */
+
 
 option {
     padding: 50px;
