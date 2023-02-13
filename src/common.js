@@ -296,13 +296,24 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     var twoReducer = []
 
-    if($('.js-example-basic-multiple').val().length > 0) {
+    /* if($('.js-example-basic-multiple').val().length > 0) {
         console.log("jq dropdown")
+    } */
 
-    }
+    console.log("just reducer ", reducer)
 
-    var mData = reducer;
-    // console.log(reducer)
+    if(!twoReducer.length)  // if twoReducer length is 0
+        twoReducer = reducer
+
+    console.log("\n two way reducer \n\n", twoReducer)
+
+    // changing the reducer array
+    // var chartData = reducer;
+    var chartData = twoReducer;
+    
+    console.log("chart data", chartData)
+
+    // have to remove the rects before redraw
 
     console.log("\n calls \n\n", filterCallsByDate)
     // console.log("\n one \n\n", one)
@@ -314,6 +325,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     function reDraw(param) {
         
+        //logic to store the whole data of object on matching SageCRMid
+
         console.log(param)
         if(param) {
             if(param.length !== 0) {
@@ -331,18 +344,23 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         } 
         else twoReducer = []
 
-        if(!twoReducer.length)
-            twoReducer = reducer
+        if(twoReducer.length) {
+            console.log("mod twoReducer ", twoReducer)
+            // console.log(twoReducer)
+            chartData = twoReducer
+        }
+
+        
             
-        console.log("\n two way reducer \n\n", twoReducer)
+        
         console.log("param ", param)
 
         // svg.selectAll('g')
 
         var x = d3.scaleTime()
-            .domain([d3.min(mData, function (d) {
+            .domain([d3.min(chartData, function (d) {
                 return d.startdate;
-            }), d3.max(mData, function (d) {
+            }), d3.max(chartData, function (d) {
                 return d.enddate;
             })])
             .range([0, width]),
@@ -351,13 +369,13 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             y2 = d3.scaleLinear().range([height2, 0]);
 
         var y = d3.scaleBand()
-            .domain(mData.map(function (entry) {
+            .domain(chartData.map(function (entry) {
                 return entry.date;
             }))
             .rangeRound([height, 0])
 
         // colors for each type
-        var types = [...new Set(mData.map(item => item.date))];
+        var types = [...new Set(chartData.map(item => item.date))];
         var colors = chroma.scale(['#8b0000', '#FFCCCB']).colors(types.length)
 
         var type2color = {}
@@ -440,7 +458,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         area.selectAll(".circle")
-            .data(mData, keyFunction).enter()
+            .data(chartData, keyFunction).enter()
             .append("rect")
             //.attr('clip-path', 'url(#clip)')
             .attr("rx", 5)
@@ -592,14 +610,20 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     // console.log("jq ", )
 
     $('.js-example-basic-multiple').on("change", function (ev) {
-        console.log("jq ", $('.js-example-basic-multiple').val())
 
-        svg.selectAll('g').remove()
+        // console.log("all g(s) ", d3.selectAll("g"))
+        console.log("jq get selected values", $('.js-example-basic-multiple').val())
+
+        d3.selectAll('.clipped').remove()
+        d3.selectAll('.zoom').remove()
+        d3.selectAll('.focus').remove()
+        d3.selectAll('.context').remove()
+        
         // removeChart();
         reDraw($('.js-example-basic-multiple').val());
     })
 
-    $('.js-example-basic-multiple')
+    // $('.js-example-basic-multiple')
     // console.log("jq ", $('#dropdown'))
 
     
