@@ -28,21 +28,56 @@ var margin = {
 
 // Define the div for the tooltip
 var tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
+                .attr("class", "tooltip")
 
 var parseDate = d3.timeParse("%b %Y");
+// console.log("y2 ", parseDate("02 02 2002"))
 
 const dateParse = (x) => {
+    console.log( "the date parser ", new Date(moment(x).format("DD/MM/YYYY")), "\nthe x", x )
     if (!isNaN(new Date(moment(x).format("DD/MM/YYYY hh:mm:ss a")).getTime())) {
         return new Date(moment(x).format("DD/MM/YYYY hh:mm:ss a"));
     } else return null
 }
 
+const dateParser2 = (x) => {
+    return new Date(moment(x).format("DD/MM/YYYY"))
+}
+
+const dateParser = (dateStr) => {
+  var parts = dateStr.split('/');
+  var day = parseInt(parts[0], 10);
+  var month = parseInt(parts[1], 10) - 1; // JS months are 0-based
+  var year = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+}
+
+
+
+// console.log("%ccommon.js","color: darkred", " parser ", dateParser(moment("31/02/2000").format("DD/MM/YYYY")))
+console.log( "%ccommon.js","color: darkred", " parser ", dateParser("31/01/2023 5:03 AM") )
+
+const convertTime12To24 = (time) => {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var secs = time.match(/:(\d+):(\d+)/)[2];
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if ((AMPM === "PM" || AMPM === "pm") && hours < 12) hours = hours + 12;
+    if ((AMPM === "AM" || AMPM === "am") && hours === 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    var sSecs = secs.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    return (sHours + ":" + sMinutes + ":" + sSecs);
+}
+
 const momentTimeFormat = (y, d) => {
 
+    
     let extractDate = moment(y).format('DD/MM/YYYY')
 
-    console.log("y ", extractDate)
+    console.log("y ext ", extractDate, "\ny dt ", y)
 
     /* let dy = y.getDate()
     let mn = y.getMonth()
@@ -77,20 +112,7 @@ const momentTimeFormat = (y, d) => {
         return (Math.trunc(hours) + ":" + Math.trunc(mins) + ":" + Math.trunc(secs));
     }
 
-    function convertTime12To24(time) {
-        var hours = Number(time.match(/^(\d+)/)[1]);
-        var minutes = Number(time.match(/:(\d+)/)[1]);
-        var secs = time.match(/:(\d+):(\d+)/)[2];
-        var AMPM = time.match(/\s(.*)$/)[1];
-        if ((AMPM === "PM" || AMPM === "pm") && hours < 12) hours = hours + 12;
-        if ((AMPM === "AM" || AMPM === "am") && hours === 12) hours = hours - 12;
-        var sHours = hours.toString();
-        var sMinutes = minutes.toString();
-        var sSecs = secs.toString();
-        if (hours < 10) sHours = "0" + sHours;
-        if (minutes < 10) sMinutes = "0" + sMinutes;
-        return (sHours + ":" + sMinutes + ":" + sSecs);
-    }
+    
 
     /* function convertTime24To12(time) {
       // Check correct time format and split into components
@@ -171,6 +193,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
 
 
+
     // The below filter removes empty array and only returns callStartedDate and Duration of the call(callEndDate)
     filterCallsByDate = data.map((d, i) => {
         return Object.keys(d).map((keys) => {
@@ -206,10 +229,17 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 // console.log("finding err end dates", callEndDate)
                 // console.log("finding ------------------------------------------------------------")
 
+                
+                
+
                 console.log('sage ', d['SageCRMid'])
                 console.log("closed ", new Date(moment(d["Close Date"]).format("DD/MM/YYYY")))
                 console.log("started ", d["Created Date"])
                 try {
+                    
+                    
+                    // console.log("parse close date ", momentTimeFormat(d['Close Date']))
+                    // console.log('%c common.js', 'color: #26bfa5;', "hello");
                     // console.warn("time formt err ", timeFormtAmPM.exec(d[keys])[0] === '' && keys)
                     return {
                         startdate: callStartedDate,
@@ -237,6 +267,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
         }).filter(k => k)
     })
+
+
+    
 
     function getSelectedValues() {
         var dropDownn = document.getElementById('dropdown'), countryArray = [], i;
@@ -300,6 +333,14 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         console.log("jq dropdown")
     } */
 
+    reducer.map((d,i) => {
+
+        console.log( "%ccommon.js", "color: green;", moment("30/02/2022").format("DD/MM/YYYY") )
+        // console.log( "%ccommon.js", "color: green;", moment(d['closed']) )
+
+        // console.log("%ccommon.js", "color: red;", moment(d['Close Date']).format("DD/MM/YYYY"))
+    })
+
     console.log("just reducer ", reducer)
 
     if(!twoReducer.length)  // if twoReducer length is 0
@@ -325,6 +366,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     function reDraw(param) {
         
+        //write a js reducer for storing values of matched
+        //write hello world
         //logic to store the whole data of object on matching SageCRMid
 
         console.log("param ", param)
@@ -343,6 +386,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             else twoReducer = [] 
         } 
         else twoReducer = []
+
+
 
         if(twoReducer.length)       // if twoReducer IS NOT empty
             chartData = twoReducer
@@ -387,7 +432,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         //             return entry.key;
         //         }))
         //     .rangeRound([0, height])
-        //     .padding(0.1);      
+        //     .padding(0.1);
 
         var rectTransform = function (d) {
             return "translate(" + x(d.startdate) + "," + y(d.date) + ")";
