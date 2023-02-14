@@ -5,7 +5,9 @@ $(document).ready(function () {
 
 // To get the event positio05
 var keyFunction = function (d) {
-    return d.created + d.date;
+    // console.log("key f", d.created + d.sageCRMid)
+    console.log("key f", d.closed + d.created)
+    return d.closed + d.created;
 }
 
 var svg = d3.select("svg")
@@ -257,8 +259,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
         var y = d3.scaleBand()
             .domain(chartData.map(function (entry) {
-                console.log("entry date ", entry)
-                return entry.date;
+                console.log("entry date ", entry.sageCRMid)
+                return entry.sageCRMid;
             }))
             .rangeRound([height, 0])
 
@@ -285,7 +287,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         //     .padding(0.1);
 
         var rectTransform = function (d) {
-            return "translate(" + x(d.created) + "," + y(d.date) + ")";
+            console.log("check y sage ", x(d.created), y(d.sageCRMid))
+            return "translate(" + x(d.created) + "," + y(d.sageCRMid) + ")";
         };
 
         var xAxis = d3.axisBottom(x),
@@ -363,6 +366,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 return (x(d.closed) - x(d.created))
             })
             .style("fill", function (d) {
+                // fill
                 return type2color[d.date]
             })
 
@@ -389,8 +393,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             })
 
             .on("mousemove", () => {
-                return tooltip.style("top", (d3.event.pageY + 25) + "px")
-                                .style("left", (d3.event.pageX - 130) + "px")
+                return tooltip.style("top", (d3.event.pageY + 15) + "px")
+                    .style("left", (d3.event.pageX - 130) + "px")
             })
 
             .on("mouseout", function (d) {
@@ -404,9 +408,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             })
             .y0(height2)
             .y1(function (d) {
-                return y2(d.price);
+                console.log("y2 ", y2(d.SageCRMid))
+                return y2(d.SageCRMid);
             });
-
 
         var context = svg.append("g")
             .attr("class", "context")
@@ -453,6 +457,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             x.domain(s.map(x2.invert, x2));
             area.selectAll(".circle").attr("transform", rectTransform)
                 .attr("width", function (d) {
+                    // return (x(d.created) + x(d.closed))
                     return (x(d.closed) - x(d.created))
                 })
             //   focus.select(".focus").attr("d", focus);
@@ -481,6 +486,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         }
 
         let mids = removeDuplicates(reducer.map(d => d['sageCRMid']))
+        console.log("mids ", mids)
 
 
         var dropDown = d3.select(".dropdown")

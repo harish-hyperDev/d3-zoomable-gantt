@@ -11,6 +11,8 @@
     fill: steelblue;
     cursor: move;
     pointer-events: all;
+
+    margin: 5px !important;
 }
 
 .zoom {
