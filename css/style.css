@@ -31,9 +31,10 @@ div.tooltip {
     display: none;
     min-width: 40px;
     height: auto;
-    color: white;
-    background: none repeat scroll 0 0 #333;
-    border: 1px solid #333;
+    color: #000;
+    background: none repeat scroll 0 0 #dddddd;
+    /* border: 1px solid #333; */
+    border-radius: 7px;
     padding: 4px;
     text-align: center;
 }

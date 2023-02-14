@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 // To get the event positio05
 var keyFunction = function (d) {
-    return d.startdate + d.date;
+    return d.created + d.date;
 }
 
 var svg = d3.select("svg")
@@ -406,9 +406,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
         var x = d3.scaleTime()
             .domain([d3.min(chartData, function (d) {
-                return d.startdate;
+                return d.created;
             }), d3.max(chartData, function (d) {
-                return d.enddate;
+                return d.closed;
             })])
             .range([0, width]),
             x2 = d3.scaleTime().range([0, width]),
@@ -423,7 +423,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
         // colors for each type
         var types = [...new Set(chartData.map(item => item.date))];
-        var colors = chroma.scale(['#8b0000', '#FFCCCB']).colors(types.length)
+        var colors = chroma.scale([ '#9F2B68', '#ADD8E6', '#FFA500', '#BFD1E4',  ]).colors(types.length)
 
         var type2color = {}
         types.forEach(function (element, index) {
@@ -444,7 +444,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         //     .padding(0.1);
 
         var rectTransform = function (d) {
-            return "translate(" + x(d.startdate) + "," + y(d.date) + ")";
+            return "translate(" + x(d.created) + "," + y(d.date) + ")";
         };
 
         var xAxis = d3.axisBottom(x),
@@ -517,9 +517,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 return y.bandwidth();
             })
             .attr("width", function (d) {
-                // console.log("negatives ", x(d.enddate) - x(d.startdate))
-                // console.log("negatives ", d.enddate, d.startdate)
-                return (x(d.enddate) - x(d.startdate))
+                // console.log("negatives ", x(d.closed) - x(d.created))
+                // console.log("negatives ", d.closed, d.created)
+                return (x(d.closed) - x(d.created))
             })
             .style("fill", function (d) {
                 return type2color[d.date]
@@ -530,7 +530,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                     .style("top", d3.event.pageY + "px")
                     .style("padding", "5px")
                     .style("display", "inline-block")
-                    .html(`${d.date} <br><br> 
+                    .html(`<b>${d.date}</b> <br><br> 
                         Call Duration : ${d.duration} <br>
                         Oppurtunity Owner : ${d.oppurtunityOwner} <br>
                         Opportunity ID : ${d.oppurtunityId} <br>
@@ -540,8 +540,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                         Account ID : ${d.accountId} <br>
                         Total Amount (Required) : ${d.amount} <br>
                         <br>
-                        Created Date : ${d.created} <br>
-                        Closed Date : ${d.closed} <br>
+                        Created Date : ${d.created.getDate()}/${d.created.getMonth() + 1}/${d.created.getFullYear()} <br>
+                        Closed Date : ${d.closed.getDate()}/${d.closed.getMonth() + 1}/${d.closed.getFullYear()} <br>
                         Last Modified Date : ${d.lastModified} <br>
                         <br>
                 `)
@@ -553,7 +553,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         var area2 = d3.area()
             .curve(d3.curveMonotoneX)
             .x(function (d) {
-                return x2(d.startdate);
+                return x2(d.created);
             })
             .y0(height2)
             .y1(function (d) {
@@ -610,7 +610,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             x.domain(s.map(x2.invert, x2));
             area.selectAll(".circle").attr("transform", rectTransform)
                 .attr("width", function (d) {
-                    return (x(d.enddate) - x(d.startdate))
+                    return (x(d.closed) - x(d.created))
                 })
             //   focus.select(".focus").attr("d", focus);
             focus.select(".axis--x").call(xAxis);
@@ -625,7 +625,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             x.domain(t.rescaleX(x2).domain());
             area.selectAll(".circle").attr("transform", rectTransform)
                 .attr("width", function (d) {
-                    return (x(d.enddate) - x(d.startdate))
+                    return (x(d.closed) - x(d.created))
                 })
             //   focus.select(".area").attr("d", area);
             focus.select(".axis--x").call(xAxis);
