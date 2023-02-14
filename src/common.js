@@ -28,13 +28,15 @@ var margin = {
 
 // Define the div for the tooltip
 var tooltip = d3.select("body").append("div")
-                .attr("class", "tooltip")
+    .attr("class", "tooltip")
 
 var parseDate = d3.timeParse("%b %Y");
 // console.log("y2 ", parseDate("02 02 2002"))
 
+
+
 const dateParse = (x) => {
-    console.log( "the date parser ", new Date(moment(x).format("DD/MM/YYYY")), "\nthe x", x )
+    console.log("the date parser ", new Date(moment(x).format("DD/MM/YYYY")), "\nthe x", x)
     if (!isNaN(new Date(moment(x).format("DD/MM/YYYY hh:mm:ss a")).getTime())) {
         return new Date(moment(x).format("DD/MM/YYYY hh:mm:ss a"));
     } else return null
@@ -45,17 +47,22 @@ const dateParser2 = (x) => {
 }
 
 const dateParser = (dateStr) => {
-  var parts = dateStr.split('/');
-  var day = parseInt(parts[0], 10);
-  var month = parseInt(parts[1], 10) - 1; // JS months are 0-based
-  var year = parseInt(parts[2], 10);
-  return new Date(year, month, day);
+    var parts = dateStr.split('/');
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1; // JS months are 0-based
+    var year = parseInt(parts[2], 10);
+
+    return new Date(year, month, day);
 }
 
 
 
 // console.log("%ccommon.js","color: darkred", " parser ", dateParser(moment("31/02/2000").format("DD/MM/YYYY")))
-console.log( "%ccommon.js","color: darkred", " parser ", dateParser("31/01/2023 5:03 AM") )
+let ep = dateParser("12/24/1999")
+console.log("ep ", ep)
+
+console.log("test date ", new Date("19-12-1999"))
+console.log("%ccommon.js", "color: darkred", " parser ", dateParser("31/01/2023 5:03 AM"))
 
 const convertTime12To24 = (time) => {
     var hours = Number(time.match(/^(\d+)/)[1]);
@@ -74,7 +81,7 @@ const convertTime12To24 = (time) => {
 
 const momentTimeFormat = (y, d) => {
 
-    
+
     let extractDate = moment(y).format('DD/MM/YYYY')
 
     console.log("y ext ", extractDate, "\ny dt ", y)
@@ -112,7 +119,7 @@ const momentTimeFormat = (y, d) => {
         return (Math.trunc(hours) + ":" + Math.trunc(mins) + ":" + Math.trunc(secs));
     }
 
-    
+
 
     /* function convertTime24To12(time) {
       // Check correct time format and split into components
@@ -225,22 +232,24 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                 // console.log("call start ", callStartedDate)
                 let callEndDate = momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0])
 
-                // console.log("finding err start dates", callStartedDate)
+                console.log("finding err start dates", callStartedDate)
                 // console.log("finding err end dates", callEndDate)
                 // console.log("finding ------------------------------------------------------------")
 
-                
-                
+
+
 
                 console.log('sage ', d['SageCRMid'])
                 console.log("closed ", new Date(moment(d["Close Date"]).format("DD/MM/YYYY")))
                 console.log("started ", d["Created Date"])
                 try {
-                    
-                    
+
+
                     // console.log("parse close date ", momentTimeFormat(d['Close Date']))
                     // console.log('%c common.js', 'color: #26bfa5;', "hello");
                     // console.warn("time formt err ", timeFormtAmPM.exec(d[keys])[0] === '' && keys)
+
+                    // new changes to closed, created
                     return {
                         startdate: callStartedDate,
                         enddate: callEndDate,
@@ -256,8 +265,8 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
                         oppurtunityOwner: d['Opportunity Owner'],
                         oppurtunityId: d['Opportunity ID'],
 
-                        created: d['Created Date'],
-                        closed: d['Close Date'],
+                        created: dateParser(d['Created Date']),
+                        closed: dateParser(d['Close Date']),
                         lastModified: d['Last Modified Date']
                         // status: Object.keys(taskStatus)[Math.floor(Math.random() * taskStatusKeys.length)]
                     }
@@ -269,9 +278,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     })
 
 
-    
 
-    function getSelectedValues() {
+
+    /* function getSelectedValues() {
         var dropDownn = document.getElementById('dropdown'), countryArray = [], i;
         for (i = 0; i < dropDownn.options.length; i += 1) {
             if (dropDownn.options[i].selected) {
@@ -302,7 +311,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
         console.log("get dropdown ", result)
         // return result;
-    }
+    } */
 
 
 
@@ -333,9 +342,9 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         console.log("jq dropdown")
     } */
 
-    reducer.map((d,i) => {
+    reducer.map((d, i) => {
 
-        console.log( "%ccommon.js", "color: green;", moment("30/02/2022").format("DD/MM/YYYY") )
+        console.log("%ccommon.js", "color: green;", moment("30/02/2022").format("DD/MM/YYYY"))
         // console.log( "%ccommon.js", "color: green;", moment(d['closed']) )
 
         // console.log("%ccommon.js", "color: red;", moment(d['Close Date']).format("DD/MM/YYYY"))
@@ -343,7 +352,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
     console.log("just reducer ", reducer)
 
-    if(!twoReducer.length)  // if twoReducer length is 0
+    if (!twoReducer.length)  // if twoReducer length is 0
         twoReducer = reducer
 
     console.log("\n two way reducer \n\n", twoReducer)
@@ -351,7 +360,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     // changing the reducer array
     // var chartData = reducer;
     var chartData = twoReducer;
-    
+
     console.log("chart data", chartData)
 
     // have to remove the rects before redraw
@@ -359,41 +368,41 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     console.log("\n calls \n\n", filterCallsByDate)
     // console.log("\n one \n\n", one)
     console.log("\n reducer \n\n", reducer)
-    
+
     // console.log("\n filtered \n\n", filteredData)
 
 
 
     function reDraw(param) {
-        
+
         //write a js reducer for storing values of matched
         //write hello world
         //logic to store the whole data of object on matching SageCRMid
 
         console.log("param ", param)
-        if(param) {
-            if(param.length !== 0) {
+        if (param) {
+            if (param.length !== 0) {
                 twoReducer = []
                 reducer.map(d => {
                     // d['sageCRMid']
-                    return param.forEach((p,i) => {
-                        if(p === d['sageCRMid'])
+                    return param.forEach((p, i) => {
+                        if (p === d['sageCRMid'])
                             twoReducer.push(d)
-                    }) 
+                    })
                 })
                 console.log("two way red ", twoReducer)
-            } 
-            else twoReducer = [] 
-        } 
+            }
+            else twoReducer = []
+        }
         else twoReducer = []
 
 
 
-        if(twoReducer.length)       // if twoReducer IS NOT empty
+        if (twoReducer.length)       // if twoReducer IS NOT empty
             chartData = twoReducer
         else                        // if twoReducer IS empty
             chartData = reducer
-        
+
 
         var x = d3.scaleTime()
             .domain([d3.min(chartData, function (d) {
@@ -656,7 +665,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         d3.selectAll('.zoom').remove()
         d3.selectAll('.focus').remove()
         d3.selectAll('.context').remove()
-        
+
         // removeChart();
         reDraw($('.js-example-basic-multiple').val());
     })
@@ -664,13 +673,13 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     // $('.js-example-basic-multiple')
     // console.log("jq ", $('#dropdown'))
 
-    
+
 
     /* $(document).ready(function () {
         reDraw();
     }); */
     reDraw();
-    
+
     // dropDown.on("change", getSelectedValues)
 
     /* d3.select(".dropdown")
