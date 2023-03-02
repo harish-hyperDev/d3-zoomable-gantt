@@ -1,123 +1,61 @@
+
 * {
-    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #fff;
+    font-family: 'Open-Sans',sans-serif;
+
 }
 
-.area {
-    fill: steelblue;
-    clip-path: url(#clip);
-}
-
-.circle {
-    fill: steelblue;
-    cursor: move;
-    pointer-events: all;
-
-    margin: 5px !important;
-}
-
-.zoom {
-    cursor: move;
-    fill: none;
-    pointer-events: all;
-}
-
-.clipped {
-    clip-path: url(#clip);
+#container{
+margin: 0 auto;
+position: relative;
+width:800px;
+overflow: visible;
 }
 
 
-
-
-div.tooltip {
-    position: absolute;
-    display: none;
-    min-width: 40px;
-    height: auto;
-    color: #000;
-    background: none repeat scroll 0 0 #dddddd;
-    /* border: 1px solid #333; */
-    border-radius: 7px;
-    padding: 4px;
-    text-align: center;
+.svg {
+  width:800px;
+  height:400px;
+  overflow: visible;
+  position:absolute;
 }
 
-/* POLAR STYLE   */
-.frame {
-    fill: none;
-    stroke: #000;
+.grid .tick {
+  stroke: lightgrey;
+  opacity: 0.3;
+  shape-rendering: crispEdges;
+}
+.grid path {
+    stroke-width: 0;
 }
 
-.axis text {
-    font-family: 'Open Sans', sans-serif;
+
+#tag {
+color: white;
+background: #FA283D;
+width: 150px;
+position: absolute;
+display: none;
+padding:3px 6px;
+margin-left: -80px;
+font-size: 11px;
 }
 
-.axis line,
-.axis circle {
-    fill: none;
-    stroke: #777;
-    stroke-dasharray: 1, 4;
-}
-
-.axis :last-of-type circle {
-    stroke: #333;
-    stroke-dasharray: none;
-}
-
-.line {
-    fill: none;
-    stroke: red;
-    stroke-width: 1.5px;
-}
-
-svg {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.overlay {
-    fill: none;
-    pointer-events: all;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-
-.zoom2 {
-    cursor: move;
-    pointer-events: all;
-}
-
-/* #dropdown {
-    padding: 10px !important;
-    margin: 10px !important;
-    margin-left: 50px !important;
-} */
-
-.select2-selection {
-    min-width: 225px;
-
-    padding: 5px !important;
-    padding-bottom: 8px !important;
-
-    margin: 10px 0px 0px 50px !important;
-}
-
-.select2-dropdown {
-    min-width: 225px;
-    margin-left: 50px !important; 
-}
-
-/* .select2-selection::after {
-    content : "Select SageCRMid(s)";
-    opacity: 0.5;
-} */
 
 
-option {
-    padding: 50px;
-    margin: 10px;
-
+#tag:before {
+border: solid transparent;
+content: ' ';
+height: 0;
+left: 50%;
+margin-left: -5px;
+position: absolute;
+width: 0;
+border-width: 10px;
+border-bottom-color: #FA283D;
+top: -20px;
 }
