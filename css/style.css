@@ -40,7 +40,8 @@ body {
   background: #FA283D;
   width: 150px;
   position: absolute;
-  display: none;
+  display: block;
+  visibility: hidden;
   padding: 3px 6px;
   margin-left: -80px;
   font-size: 11px;

@@ -162,6 +162,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("y", function (d, i) {
         return i * theGap + 14 + theTopPad;
       })
+      .attr("class",`text${gantChartIndex}`)
       .attr("font-size", 11)
       .attr("text-anchor", "middle")
       .attr("text-height", theBarHeight)
@@ -172,8 +173,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("id",`tag${gantChartIndex}`)
       .attr("class","tooltip")
 
-    rectText.on('mouseover', function (e) {
-      // 
+    $(`.text${gantChartIndex}`).mouseover(function() {
       var tag = "";
 
       if (d3.select(this).data()[0].details != undefined) {
@@ -189,29 +189,52 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
           "Closed: " + d3.select(this).data()[0]["Close Date"];
       }
 
-      
-      
+      var output = document.getElementById(`tag${gantChartIndex}`);
+
+      var x = this.x.animVal.getItem(this) + "px";
+      var y = d3.event.pageY + 10 + "px"
+
+      output.innerHTML = tag;
+      output.style.top = y;
+      output.style.left = x;
+      output.style.visibility = "visible"
+    })
+
+    $(`.text${gantChartIndex}`).mouseout(function() { 
+      var output = document.getElementById(`tag${gantChartIndex}`);
+      output.style.visibility = "hidden"
+    })
+
+    rectText.on('mouseover', function (e) {
+      var tag = "";
+
+      if (d3.select(this).data()[0].details != undefined) {
+        tag = "Account Name: " + d3.select(this).data()[0]["Account Name"] + "<br/>" +
+          "SageCRMid: " + d3.select(this).data()[0]["SageCRMid"] + "<br/>" +
+          "Created: " + d3.select(this).data()[0]["Created Date"] + "<br/>" +
+          "Closed: " + d3.select(this).data()[0]["Close Date"] + "<br/>" +
+          "Details: " + d3.select(this).data()[0].details;
+      } else {
+        tag = "Account Name: " + d3.select(this).data()[0]["Account Name"] + "<br/>" +
+          "Type: " + d3.select(this).data()[0]["SageCRMid"] + "<br/>" +
+          "Created: " + d3.select(this).data()[0]["Created Date"] + "<br/>" +
+          "Closed: " + d3.select(this).data()[0]["Close Date"];
+      }
 
       var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = this.x.animVal.getItem(this) + "px";
-      // var y = this.y.animVal.getItem(this) + 25 + "px";
-      var y = $(`.rect${gantChartIndex}`)[0].y.animVal.value
-
-      console.log($(`.rect${gantChartIndex}`))
-
-      // y = i * theGap + 14 + theTopPad
-      console.log("the y ", y)
+      var y = d3.event.pageY + 10 + "px"
 
       output.innerHTML = tag;
-      output.style.top = $(`.rect${gantChartIndex}`)[0]["clientHeight"];
+      output.style.top = y;
       output.style.left = x;
-      output.style.display = "block";
+      output.style.visibility = "visible"
       console.log(output.style.top)
 
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
-      output.style.display = "none";
+      output.style.visibility = "hidden"
     });
 
 
@@ -234,25 +257,16 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       }
       var output = document.getElementById(`tag${gantChartIndex}`);
 
-      // console.log($(`.gantt${gantChartIndex}`)[0].offsetTop)
-      console.log("rect ")
-      console.log($(`.rect${gantChartIndex}`)[0].y.animVal.value)
-
       var x = (this.x.animVal.value + this.width.animVal.value / 2) + "px";
-      // var y = this.y.animVal.value + 25 + "px";
-      // var y = $(`.gantt${gantChartIndex}`)[0].offsetTop + "px";
-      var y = $(`.rect${gantChartIndex}`)[0].y.animVal.value
-
-      // console.log(" y ", y)
+      var y = d3.event.pageY + 10 + "px"
 
       output.innerHTML = tag;
       output.style.top = y;
       output.style.left = x;
-      output.style.display = "block";
+      output.style.visibility = "visible"
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
-      output.style.display = "none";
-
+      output.style.visibility = "hidden"
     });
 
 
@@ -319,7 +333,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
       // gaps between rects
       .attr("y", (d) => { return 1 * theGap / 2 + theTopPad })
-      .attr("font-size", 11)
+      .attr("font-size", 17)
       .attr("text-anchor", "start")
       .attr("text-height", 14)
 
