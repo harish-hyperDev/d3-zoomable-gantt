@@ -3,7 +3,7 @@ $(document).ready(function () {
 });
 
 
-// To get the event positio05
+// To get the event position
 var keyFunction = function (d) {
     // console.log("key f", d.created + d.sageCRMid)
     console.log("key f", d.closed + d.created)
@@ -44,10 +44,6 @@ const dateParse = (x) => {
     } else return null
 }
 
-const dateParser2 = (x) => {
-    return new Date(moment(x).format("DD/MM/YYYY"))
-}
-
 const dateParser = (dateStr) => {
     var parts = dateStr.split('/');
     var day = parseInt(parts[0], 10);
@@ -57,13 +53,16 @@ const dateParser = (dateStr) => {
     return new Date(year, month, day);
 }
 
+const dateParser2 = (x) => {
+    return new Date(moment(x).format("DD/MM/YYYY"))
+}
+
+
+
 
 
 // 
 let ep = dateParser("12/24/1999")
-
-
-
 
 
 const convertTime12To24 = (time) => {
@@ -81,6 +80,12 @@ const convertTime12To24 = (time) => {
     return (sHours + ":" + sMinutes + ":" + sSecs);
 }
 
+const getDateFromParams = (x,y) => {
+    console.log("splitter ", x.split('/')[2], x.split('/')[1], x.split('/')[0])
+    return new Date( x.split('/')[2], x.split('/')[1] - 1, x.split('/')[0] )
+}
+console.log("get date ", getDateFromParams("24/11/2999"))
+
 const momentTimeFormat = (y, d) => {
 
 
@@ -90,6 +95,8 @@ const momentTimeFormat = (y, d) => {
     let m = moment.duration(a24).asSeconds() + moment.duration(d).asSeconds()
 
     a = a.substring(0, a.length - 3)
+
+    console.log("a ", a, "\na24 ", a24,"\nm ", m)
 
     function durationTo24H(data) {
         /* var minutes = data % 60;
@@ -114,18 +121,16 @@ const momentTimeFormat = (y, d) => {
         time[0] = +time[0] % 12 || 12; // Adjust hours
       } 
   
-  
       return time.join(''); // return adjusted time or original string
-  
-  
     }*/
 
+    // console.log("test parser ", dateParser2(d[keys]))
 
     let resultTime = durationTo24H(m)
     let resultDate = extractDate + " " + resultTime
 
     let finalRes = new Date(moment(extractDate + " " + resultTime).format('MM/DD/YYYY hh:mm:ss a'))
-
+    console.log("final ", resultTime)
     return finalRes
     // return durationTo24H(m)
 
@@ -157,13 +162,15 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
 
             let date = keys;
 
+            console.log("date parser ", d[keys] )
             if (dateRegEx.test(keys) && d[keys] !== '' && d[keys] !== null && dateParse(keys) !== null) {
                 // don't remove these variables!!
+                console.log("tf ", keys + ' ' + timeFormtAmPM.exec(d[keys])[0])
                 let callStartedDate = dateParse(keys + ' ' + timeFormtAmPM.exec(d[keys])[0])
-                // 
                 let callEndDate = momentTimeFormat(keys + ' ' + timeFormtAmPM.exec(d[keys])[0], durationRegEx.exec(d[keys])[0])
 
-
+                console.log("call start ", callStartedDate)
+                // console.log
                 try {
                     // new changes to closed, created
                     return {
@@ -192,7 +199,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         }).filter(k => k)
     })
 
-
+    console.log('%ccommon.js line:196 filterCallsByDate', 'color: #007acc;', filterCallsByDate);
 
     let red = []
     let reducer = []
@@ -210,7 +217,6 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
     reducer = reducer.filter(k => k)
 
     var twoReducer = []
-
 
     if (!twoReducer.length)  // if twoReducer length is 0
         twoReducer = reducer
@@ -287,7 +293,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
         //     .padding(0.1);
 
         var rectTransform = function (d) {
-            console.log("check y sage ", x(d.created), y(d.sageCRMid))
+            // console.log("check y sage ", x(d.created), y(d.sageCRMid))
             return "translate(" + x(d.created) + "," + y(d.sageCRMid) + ")";
         };
 
@@ -408,7 +414,7 @@ var drawChatFromData = d3.csv('../data/timeline_sample.csv', function (data) {
             })
             .y0(height2)
             .y1(function (d) {
-                console.log("y2 ", y2(d.SageCRMid))
+                // console.log("y2 ", y2(d.SageCRMid))
                 return y2(d.SageCRMid);
             });
 
