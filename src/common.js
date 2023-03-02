@@ -87,6 +87,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .data(theArray)
       .enter()
       .append("rect")
+      
       .attr("x", 0)
       .attr("y", function (d, i) {
         console.log(i * theGap + theTopPad - 2)
@@ -96,6 +97,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
         // return w - theSidePad / 2;
         return w - 100;
       })
+
+      
       .attr("height", theGap)
       .attr("stroke", "none")
       .attr("fill", function (d) {
@@ -117,6 +120,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
 
     var innerRects = rectangles.append("rect")
+      .attr("class", `rect${gantChartIndex}`)
       .attr("rx", 3)
       .attr("ry", 3)
       .attr("x", function (d) {
@@ -126,6 +130,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("y", function (d, i) {
         return i * theGap + theTopPad;
       })
+      
 
       // issue with the width here
       .attr("width", function (d) {
@@ -190,12 +195,19 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = this.x.animVal.getItem(this) + "px";
-      var y = this.y.animVal.getItem(this) + 25 + "px";
+      // var y = this.y.animVal.getItem(this) + 25 + "px";
+      var y = $(`.rect${gantChartIndex}`)[0].y.animVal.value
+
+      console.log($(`.rect${gantChartIndex}`))
+
+      // y = i * theGap + 14 + theTopPad
+      console.log("the y ", y)
 
       output.innerHTML = tag;
-      output.style.top = y;
+      output.style.top = $(`.rect${gantChartIndex}`)[0]["clientHeight"];
       output.style.left = x;
       output.style.display = "block";
+      console.log(output.style.top)
 
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
@@ -206,6 +218,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     innerRects.on('mouseover', function (e) {
       //
       var tag = "";
+      // console.log('target element', e)
 
       if (d3.select(this).data()[0].details != undefined) {
         tag = "Account Name: " + d3.select(this).data()[0]["Account Name"] + "<br/>" +
@@ -221,8 +234,16 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       }
       var output = document.getElementById(`tag${gantChartIndex}`);
 
+      // console.log($(`.gantt${gantChartIndex}`)[0].offsetTop)
+      console.log("rect ")
+      console.log($(`.rect${gantChartIndex}`)[0].y.animVal.value)
+
       var x = (this.x.animVal.value + this.width.animVal.value / 2) + "px";
-      var y = this.y.animVal.value + 25 + "px";
+      // var y = this.y.animVal.value + 25 + "px";
+      // var y = $(`.gantt${gantChartIndex}`)[0].offsetTop + "px";
+      var y = $(`.rect${gantChartIndex}`)[0].y.animVal.value
+
+      // console.log(" y ", y)
 
       output.innerHTML = tag;
       output.style.top = y;
