@@ -61,7 +61,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
 
 
-  function makeGant(tasks, pageWidth, pageHeight, gantChartLabel) {
+  function makeGant(tasks, pageWidth, pageHeight, gantChartLabel, gantChartIndex) {
 
     var barHeight = 20;
     var gap = barHeight + 4;
@@ -74,13 +74,13 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .interpolate(d3.interpolateHcl);
 
     makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
-    drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight);
+    drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight, gantChartIndex);
     vertLabels(gap, topPadding, sidePadding, barHeight, colorScale, gantChartLabel);
 
   }
 
 
-  function drawRects(theArray, theGap, theTopPad, theSidePad, theBarHeight, theColorScale, w, h) {
+  function drawRects(theArray, theGap, theTopPad, theSidePad, theBarHeight, theColorScale, w, h, gantChartIndex) {
 
     var bigRects = svg.append("g")
       .selectAll("rect")
@@ -162,6 +162,10 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("text-height", theBarHeight)
       .attr("fill", "#fff");
 
+    d3.select(`.gantt${gantChartIndex}`)
+      .append("div")
+      .attr("id",`tag${gantChartIndex}`)
+      .attr("class","tooltip")
 
     rectText.on('mouseover', function (e) {
       // 
@@ -179,7 +183,11 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
           "Created: " + d3.select(this).data()[0]["Created Date"] + "<br/>" +
           "Closed: " + d3.select(this).data()[0]["Close Date"];
       }
-      var output = document.getElementById("tag");
+
+      
+      
+
+      var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = this.x.animVal.getItem(this) + "px";
       var y = this.y.animVal.getItem(this) + 25 + "px";
@@ -188,8 +196,9 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.top = y;
       output.style.left = x;
       output.style.display = "block";
+
     }).on('mouseout', function () {
-      var output = document.getElementById("tag");
+      var output = document.getElementById(`tag${gantChartIndex}`);
       output.style.display = "none";
     });
 
@@ -210,7 +219,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
           "Created: " + d3.select(this).data()[0]["Created Date"] + "<br/>" +
           "Closed: " + d3.select(this).data()[0]["Close Date"];
       }
-      var output = document.getElementById("tag");
+      var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = (this.x.animVal.value + this.width.animVal.value / 2) + "px";
       var y = this.y.animVal.value + 25 + "px";
@@ -220,7 +229,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.left = x;
       output.style.display = "block";
     }).on('mouseout', function () {
-      var output = document.getElementById("tag");
+      var output = document.getElementById(`tag${gantChartIndex}`);
       output.style.display = "none";
 
     });
@@ -245,7 +254,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     // the bottom grid x-axis
     var grid = svg.append('g')
       .attr('class', 'grid')
-      .attr('transform', 'translate(' + theSidePad + ', ' + (h + 25) + ')')
+      .attr('transform', 'translate(' + theSidePad + ', ' + (h - 25) + ')')
       .call(xAxis)
       .selectAll("text")
       .style("text-anchor", "middle")
@@ -288,22 +297,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("x", 10)
 
       // gaps between rects
-      .attr("y", (d) => { return 1 * theGap / 2 + theTopPad}
-      /* function (d, i) {
-        if (i > 0) {
-          for (var j = 0; j < i; j++) {
-            prevGap += numOccurances[i - 1][1];
-            // 
-            console.log("d 1 ", d[1])
-            console.log("label on ", i, "  -->  ", d[1] * theGap / 2 + prevGap * theGap + theTopPad)
-            return d[1] * theGap / 2 + prevGap * theGap + theTopPad;
-          }
-        } else {
-          console.log("label on ", i, "  -->  ", d[1] * theGap / 2 + theTopPad)
-          return d[1] * theGap / 2 + theTopPad;
-        }
-      } */
-      )
+      .attr("y", (d) => { return 1 * theGap / 2 + theTopPad })
       .attr("font-size", 11)
       .attr("text-anchor", "start")
       .attr("text-height", 14)
@@ -363,7 +357,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
     console.log(sequentialData)
 
-    makeGant(sequentialData, w, h, categories[gantt_i]);
+    makeGant(sequentialData, w, h, categories[gantt_i], gantt_i);
     // h = h + 20;
 
   }
