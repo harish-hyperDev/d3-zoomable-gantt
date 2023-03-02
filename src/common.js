@@ -11,8 +11,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   check["Account Name"] = "Test"
   
   // data = [data[0],  check, data[1], data[100], data[3], data[4], data[6]]
-  data = data.slice(0,10)
-  console.log("full data ", data)
+  data = data.slice(0,20)
+  
   // Used SageCRMid instead of type
 
   var dateFormat = d3.timeParse("%d/%m/%Y");
@@ -43,7 +43,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   var catsUnfiltered = categories; //for vert labels
 
   categories = checkUnique(categories);
-  console.log("unique ", categories)
+  
 
   // checking with one category first
   // categories = [categories[0], categories[1], categories[2]]
@@ -66,7 +66,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     var barHeight = 20;
     var gap = barHeight + 4;
     var topPadding = 75;
-    var sidePadding = 75;
+    var sidePadding = 100;
 
     var colorScale = d3.scaleLinear()
       .domain([0, categories.length])
@@ -90,10 +90,11 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       
       .attr("x", 0)
       .attr("y", function (d, i) {
-        console.log(i * theGap + theTopPad - 2)
+        
         return i * theGap + theTopPad - 2;
       })
       .attr("width", function (d) {
+        // return 2500;
         // return w - theSidePad / 2;
         return w - 100;
       })
@@ -230,7 +231,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.top = y;
       output.style.left = x;
       output.style.visibility = "visible"
-      console.log(output.style.top)
+      
 
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
@@ -241,7 +242,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     innerRects.on('mouseover', function (e) {
       //
       var tag = "";
-      // console.log('target element', e)
+      // 
 
       if (d3.select(this).data()[0].details != undefined) {
         tag = "Account Name: " + d3.select(this).data()[0]["Account Name"] + "<br/>" +
@@ -308,13 +309,13 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     var numOccurances = new Array();
     var prevGap = 0; 
 
-    // console.log("label ", theGantChartLabel)
+    // 
 
     for (var i = 0; i < categories.length; i++) {
       numOccurances[i] = [categories[i], getCount(categories[i], catsUnfiltered)];
     }
 
-    // console.log("occurrences ", numOccurances)
+    // 
 
     
  
@@ -376,9 +377,9 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   var svg;
 
-  console.log("unique length ", categories.length)
+  
   for(let gantt_i = 0; gantt_i < categories.length; gantt_i++) {
-    console.log("called ", gantt_i)
+    
     svg = d3.select(".svg")
             //.selectAll("svg")
               .append("div")
@@ -390,7 +391,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
 
     let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
-    console.log(sequentialData)
+    
 
     makeGant(sequentialData, w, h, categories[gantt_i], gantt_i);
     // h = h + 20;
