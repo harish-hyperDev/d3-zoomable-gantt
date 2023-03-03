@@ -12,21 +12,22 @@ body {
 #container {
   margin: 0 auto;
   position: relative;
-  width: 800px;
+  /* width: 800px; */
+  padding: 20px 50px;
   overflow: visible;
 }
 
 
 .svg {
-  width: 800px;
-  height: 400px;
+  /* width: 800px;
+  height: 400px; */
   overflow: visible;
   position: absolute;
 }
 
 .grid .tick {
   stroke: lightgrey;
-  opacity: 0.3;
+  /* opacity: 0.3; */
   shape-rendering: crispEdges;
 }
 
@@ -38,13 +39,17 @@ body {
 .tooltip {
   color: white;
   background: #FA283D;
-  width: 150px;
+  width: auto;
   position: absolute;
   display: block;
   visibility: hidden;
   padding: 3px 6px;
   margin-left: -80px;
   font-size: 11px;
+}
+
+rect:hover {
+  cursor: pointer;
 }
 
 .tooltip:before {
@@ -59,6 +64,7 @@ body {
   border-bottom-color: #FA283D;
   top: -20px;
 }
+
 /* 
 #tag {
   color: white;

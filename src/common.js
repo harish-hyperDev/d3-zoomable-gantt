@@ -1,4 +1,4 @@
-var w = 800;
+var w = window.innerWidth - 400;
 var h = 200;
 
 
@@ -11,7 +11,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   check["Account Name"] = "Test"
   
   // data = [data[0],  check, data[1], data[100], data[3], data[4], data[6]]
-  data = data.slice(0,20)
+  data = [...data.slice(0,20), check]
   
   // Used SageCRMid instead of type
 
@@ -63,11 +63,12 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   function makeGant(tasks, pageWidth, pageHeight, gantChartLabel, gantChartIndex) {
 
-    var barHeight = 20;
+    var barHeight = 10;
     var gap = barHeight + 4;
     var topPadding = 75;
     var sidePadding = 100;
 
+    console.log("page width ", pageWidth)
     var colorScale = d3.scaleLinear()
       .domain([0, categories.length])
       .range(["#00B9FA", "#F95002"])
@@ -111,13 +112,13 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
         return "#fff";
       })
-      .attr("opacity", 0.2);
+      .attr("opacity", 0);  // the opacity of rect bar itself (like there's opacity on left and right side of bar, so modified the opactity to 0 in this line)
 
 
     var rectangles = svg.append('g')
-      .selectAll("rect")
-      .data(theArray)
-      .enter();
+                        .selectAll("rect")
+                        .data(theArray)
+                        .enter();
 
 
     var innerRects = rectangles.append("rect")
@@ -151,11 +152,13 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       })
 
 
-    // Text to appear on rects
+    // Text to appear on rects 
     var rectText = rectangles.append("text")
-      .text(function (d) {
+    // (not displaying the text for now)
+
+      /* .text(function (d) {
         return d["Account Name"];
-      })
+      }) */
       .attr("x", function (d) {
         // return (timeScale(dateFormat.parse(d.endTime)) - timeScale(dateFormat.parse(d.startTime))) / 2 + timeScale(dateFormat.parse(d.startTime)) + theSidePad;
         return (timeScale(dateFormat(d["Close Date"])) - timeScale(dateFormat(d["Created Date"]))) / 2 + timeScale(dateFormat(d["Created Date"])) + theSidePad;
@@ -193,7 +196,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = this.x.animVal.getItem(this) + "px";
-      var y = d3.event.pageY + 10 + "px"
+      var y = d3.event.pageY - 10 + "px"
 
       output.innerHTML = tag;
       output.style.top = y;
@@ -201,7 +204,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.visibility = "visible"
     })
 
-    $(`.text${gantChartIndex}`).mouseout(function() { 
+    $(`.text${gantChartIndex}`).mouseout(function() {
       var output = document.getElementById(`tag${gantChartIndex}`);
       output.style.visibility = "hidden"
     })
@@ -225,7 +228,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = this.x.animVal.getItem(this) + "px";
-      var y = d3.event.pageY + 10 + "px"
+      var y = d3.event.pageY - 10 + "px"
 
       output.innerHTML = tag;
       output.style.top = y;
@@ -259,12 +262,12 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       var output = document.getElementById(`tag${gantChartIndex}`);
 
       var x = (this.x.animVal.value + this.width.animVal.value / 2) + "px";
-      var y = d3.event.pageY + 10 + "px"
+      var y = d3.event.pageY - 10 + "px"
 
       output.innerHTML = tag;
       output.style.top = y;
       output.style.left = x;
-      output.style.visibility = "visible"
+      output.style.visibility = "visible";
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
       output.style.visibility = "hidden"
@@ -280,7 +283,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
     var xAxis = d3.axisBottom()
       .scale(timeScale)
-      .ticks(d3.timeMonth.filter(d => d3.timeMonth.count(0, d) % 1 === 0))    // use d3.timeDay for diff. in days
+      .ticks(d3.timeDay.filter(d => d3.timeDay.count(0, d) % 10 === 0))    // use d3.timeDay for diff. in days
       .tickSize(-h + theTopPad + 20, 0, 0)
       .tickFormat(d3.timeFormat('%d %b'));
 
