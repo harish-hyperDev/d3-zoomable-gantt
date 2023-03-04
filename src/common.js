@@ -1,4 +1,4 @@
-var w = window.innerWidth - 400;
+var w = window.innerWidth - 135;
 var h = 200;
 
 
@@ -9,24 +9,28 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   check["Created Date"] = "01/01/2023"
   check["Close Date"] = "05/02/2023"
   check["Account Name"] = "Test"
-  
+
   // data = [data[0],  check, data[1], data[100], data[3], data[4], data[6]]
-  data = [...data.slice(0,20), check]
-  
+
+  data = [...data.slice(0, 60), check]
+
   // Used SageCRMid instead of type
 
   var dateFormat = d3.timeParse("%d/%m/%Y");
 
-  
+
 
   var timeScale = d3.scaleTime()
     /* .domain([d3.min(taskArray, function (d) { ,
+    d3.max(taskArray, function (d) { return dateFormat(d.startTime); })])f
     d3.max(taskArray, function (d) { return dateFormat(d.endTime); })]) */
     .domain([
       d3.min(data, function (d) { return dateFormat(d["Created Date"]); }),
       d3.max(data, function (d) { return dateFormat(d["Close Date"]); })
     ])
     .range([0, w - 10]);
+
+
 
   /* var yScale = d3.scaleBand()
     .domain(data.map(function (entry) {
@@ -40,15 +44,16 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     categories.push(data[i]["SageCRMid"]);
   }
 
-  var catsUnfiltered = categories; //for vert labels
+  var catsUnfiltered = categories; // for vert labels
 
   categories = checkUnique(categories);
-  
+  console.log("length ",  categories.length)
+
 
   // checking with one category first
   // categories = [categories[0], categories[1], categories[2]]
-  
-  
+
+
 
   /* var title = svg.append("text")
                     .text("Gantt Chart Process")
@@ -74,9 +79,34 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .range(["#00B9FA", "#F95002"])
       .interpolate(d3.interpolateHcl);
 
+    // start of pagination code
+    pageSize = 8;
+    var pageCount = Math.floor($(".svg div").length / pageSize);  // pagecount is in decimal numbers foramt 
+    console.log("pagination count ", pageCount)
+    for (var i = 0; i < pageCount; i++) {
+      $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li> ');
+    }
+    $("#pagin li").first().find("a").addClass("current")
+    showPage = function (page) {
+      $(".line-content").hide();
+      $(".line-content").each(function (n) {
+        if (n >= pageSize * (page - 1) && n < pageSize * page)
+          $(this).show();
+      });
+    }
+    showPage(1);
+    $("#pagin li a").click(function () {
+      $("#pagin li a").removeClass("current");
+      $(this).addClass("current");
+      showPage(parseInt($(this).text()))
+    });
+    // end of pagination code
+
     makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
     drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight, gantChartIndex);
     vertLabels(gap, topPadding, sidePadding, barHeight, colorScale, gantChartLabel);
+
+
 
   }
 
@@ -88,10 +118,10 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .data(theArray)
       .enter()
       .append("rect")
-      
+
       .attr("x", 0)
       .attr("y", function (d, i) {
-        
+
         return i * theGap + theTopPad - 2;
       })
       .attr("width", function (d) {
@@ -100,7 +130,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
         return w - 100;
       })
 
-      
+
       .attr("height", theGap)
       .attr("stroke", "none")
       .attr("fill", function (d) {
@@ -116,9 +146,9 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
 
     var rectangles = svg.append('g')
-                        .selectAll("rect")
-                        .data(theArray)
-                        .enter();
+      .selectAll("rect")
+      .data(theArray)
+      .enter();
 
 
     var innerRects = rectangles.append("rect")
@@ -127,18 +157,18 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .attr("ry", 3)
       .attr("x", function (d) {
         // return timeScale(dateFormat.parse(d.startTime)) + theSidePad;
-        return timeScale(dateFormat(d["Created Date"])) + theSidePad;
+        return timeScale(dateFormat(d["Created Date"]));
       })
       .attr("y", function (d, i) {
         return i * theGap + theTopPad;
       })
-      
+
 
       // issue with the width here
       .attr("width", function (d) {
         // return (timeScale(dateFormat.parse(d.endTime)) - timeScale(dateFormat.parse(d.startTime)));
-        
-        
+
+
         return (timeScale(dateFormat(d["Close Date"])) - timeScale(dateFormat(d["Created Date"])));
       })
       .attr("height", theBarHeight)
@@ -154,19 +184,22 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
     // Text to appear on rects 
     var rectText = rectangles.append("text")
-    // (not displaying the text for now)
+      // (not displaying the text for now)
 
       /* .text(function (d) {
         return d["Account Name"];
       }) */
+
+      // anyway it's just x for text, as the text is commmented, the below code doesn't matter.
       .attr("x", function (d) {
         // return (timeScale(dateFormat.parse(d.endTime)) - timeScale(dateFormat.parse(d.startTime))) / 2 + timeScale(dateFormat.parse(d.startTime)) + theSidePad;
-        return (timeScale(dateFormat(d["Close Date"])) - timeScale(dateFormat(d["Created Date"]))) / 2 + timeScale(dateFormat(d["Created Date"])) + theSidePad;
+        // return (timeScale(dateFormat(d["Close Date"])) - timeScale(dateFormat(d["Created Date"]))) / 2 + timeScale(dateFormat(d["Created Date"])) + theSidePad;  // working fine
+        return (timeScale(dateFormat(d["Close Date"])) - timeScale(dateFormat(d["Created Date"]))) / 2 + timeScale(dateFormat(d["Created Date"]));
       })
       .attr("y", function (d, i) {
         return i * theGap + 14 + theTopPad;
       })
-      .attr("class",`text${gantChartIndex}`)
+      .attr("class", `text${gantChartIndex}`)
       .attr("font-size", 11)
       .attr("text-anchor", "middle")
       .attr("text-height", theBarHeight)
@@ -174,10 +207,10 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
     d3.select(`.gantt${gantChartIndex}`)
       .append("div")
-      .attr("id",`tag${gantChartIndex}`)
-      .attr("class","tooltip")
+      .attr("id", `tag${gantChartIndex}`)
+      .attr("class", "tooltip")
 
-    $(`.text${gantChartIndex}`).mouseover(function() {
+    $(`.text${gantChartIndex}`).mouseover(function () {
       var tag = "";
 
       if (d3.select(this).data()[0].details != undefined) {
@@ -204,7 +237,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.visibility = "visible"
     })
 
-    $(`.text${gantChartIndex}`).mouseout(function() {
+    $(`.text${gantChartIndex}`).mouseout(function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
       output.style.visibility = "hidden"
     })
@@ -234,7 +267,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       output.style.top = y;
       output.style.left = x;
       output.style.visibility = "visible"
-      
+
 
     }).on('mouseout', function () {
       var output = document.getElementById(`tag${gantChartIndex}`);
@@ -293,7 +326,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     // the bottom grid x-axis
     var grid = svg.append('g')
       .attr('class', 'grid')
-      .attr('transform', 'translate(' + theSidePad + ', ' + (h - 25) + ')')
+      // .attr('transform', 'translate(' + theSidePad + ', ' + (h - 25) + ')')
+      .attr('transform', 'translate(' + 0 + ', ' + (h - 25) + ')')
       .call(xAxis)
       .selectAll("text")
       .style("text-anchor", "middle")
@@ -310,7 +344,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   function vertLabels(theGap, theTopPad, theSidePad, theBarHeight, theColorScale, theGantChartLabel) {
     var numOccurances = new Array();
-    var prevGap = 0; 
+    var prevGap = 0;
 
     // 
 
@@ -320,8 +354,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
     // 
 
-    
- 
+
+
     // Text on left axis
     var axisText = svg.append("g") //without doing this, impossible to put grid lines behind text
       .selectAll("text")
@@ -329,14 +363,14 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .enter()
       .append("text")
       .text(function (d) {
-        
+
         // return d[0];
         return theGantChartLabel
       })
       .attr("x", 10)
 
       // gaps between rects
-      .attr("y", (d) => { return 1 * theGap / 2 + theTopPad })
+      .attr("y", (d) => { return 1 * theGap / 2 + theTopPad - 30 })
       .attr("font-size", 17)
       .attr("text-anchor", "start")
       .attr("text-height", 14)
@@ -380,21 +414,26 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   var svg;
 
-  
-  for(let gantt_i = 0; gantt_i < categories.length; gantt_i++) {
-    
+
+  for (let gantt_i = 0; gantt_i < categories.length; gantt_i++) {
+
     svg = d3.select(".svg")
-            //.selectAll("svg")
-              .append("div")
-              .attr("class",`gantt${gantt_i}`)
-                .append("svg")
-                .attr("width", w)
-                .attr("height", h)
-                .attr("class", `svg${gantt_i}`);
+      //.selectAll("svg")
+      .append("div")
+        .attr("class", `gantt${gantt_i}`)
+        // .attr("class", "ganttt-div")
+        .style("border", "1px solid black")
+        .style("margin", "10px")
+        .style("border-radius", "7px")
+        .style("padding", "20px")
+        .append("svg")
+          .attr("width", w)
+          .attr("height", h)
+          .attr("class", `svg${gantt_i}`);
 
 
     let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
-    
+
 
     makeGant(sequentialData, w, h, categories[gantt_i], gantt_i);
     // h = h + 20;
