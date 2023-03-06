@@ -66,6 +66,34 @@ rect:hover {
   top: -20px;
 }
 
+#pagin {
+  padding: 10px;
+  display: inline-block;
+  position: static;
+  top: 100%;
+}
+
+#pagin li a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+li {
+  list-style-type: none;
+}
+
+#pagin li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#pagin li a:hover:not(.active) {
+  background-color: #ddd;
+}
+
 /* 
 #tag {
   color: white;

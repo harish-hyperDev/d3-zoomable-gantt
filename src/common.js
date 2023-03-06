@@ -12,7 +12,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   // data = [data[0],  check, data[1], data[100], data[3], data[4], data[6]]
 
-  data = [...data.slice(0, 60), check]
+  // data = [...data.slice(0, 100), check]
 
   // Used SageCRMid instead of type
 
@@ -47,7 +47,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   var catsUnfiltered = categories; // for vert labels
 
   categories = checkUnique(categories);
-  console.log("length ",  categories.length)
+  // console.log("length ", categories.length)
 
 
   // checking with one category first
@@ -73,13 +73,13 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     var topPadding = 75;
     var sidePadding = 100;
 
-    console.log("page width ", pageWidth)
+    // console.log("page width ", pageWidth)
     var colorScale = d3.scaleLinear()
-      .domain([0, categories.length])
+      // .domain([0, categories.length])   //previous domain for color
       .range(["#00B9FA", "#F95002"])
       .interpolate(d3.interpolateHcl);
 
-    
+
 
     makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
     drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight, gantChartIndex);
@@ -365,7 +365,6 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   }
 
-  //from this stackexchange question: http://stackoverflow.com/questions/1890203/unique-for-arrays-in-javascript
   function checkUnique(arr) {
     var hash = {}, result = [];
     for (var i = 0, l = arr.length; i < l; ++i) {
@@ -377,7 +376,6 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     return result;
   }
 
-  //from this stackexchange question: http://stackoverflow.com/questions/14227981/count-how-many-strings-in-an-array-have-duplicates-in-the-same-array
   function getCounts(arr) {
     var i = arr.length, // var to loop over
       obj = {}; // obj to store results
@@ -394,33 +392,67 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   var svg;
 
 
-  for (let gantt_i = 0; gantt_i < categories.length; gantt_i++) {
+  function loopGantt(startGantt=0, endGantt=10) {
+    for (let gantt_i = startGantt; gantt_i < endGantt; gantt_i++) {
 
-    svg = d3.select(".svg")
-      //.selectAll("svg")
-      .append("div")
+      svg = d3.select(".svg")
+        //.selectAll("svg")
+        .append("div")
         .attr("class", `gantt${gantt_i}`)
         // .attr("class", "ganttt-div")
         // .style("border", "1px solid black")
         .style("box-shadow", "rgba(0, 0, 0, 0.35) 0px 5px 15px")   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         .style("margin", "10px")
-        .style("margin-bottom","20px")
+        .style("margin-bottom", "20px")
         .style("border-radius", "7px")
         .style("padding", "20px")
         .append("svg")
-          .attr("width", w)
-          .attr("height", h)
-          .attr("class", `svg${gantt_i}`);
+        .attr("width", w)
+        .attr("height", h)
+        .attr("class", `svg${gantt_i}`);
 
 
-    let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
+      let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
 
+      makeGant(sequentialData, w, h, categories[gantt_i], gantt_i);
+      // h = h + 20;
 
-    makeGant(sequentialData, w, h, categories[gantt_i], gantt_i);
-    // h = h + 20;
-
+    }
   }
 
-  
+  // start of pagination code
+  pageSize = 10;
+  let pageCount = Math.floor(categories.length / pageSize);  // pagecount is in decimal numbers foramt 
+
+  for (let i = 0; i < pageCount; i++) {
+    // $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
+    $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
+  }
+
+  $("#pagin li a").click(function () {
+    /* $("#pagin li a").removeClass("current");
+    $(this).addClass("current"); */
+    $(".svg div").remove()
+    loopGantt(parseInt($(this).text())*10, (parseInt($(this).text())*10)+10)
+  });
+
+  loopGantt();
+
+  // $(".svg div").remove()
+  /* $("#pagin li").first().find("a").addClass("current")
+  function showPage(page) {
+    $(".line-content").hide();
+    $(".line-content").each(function (n) {
+      if (n >= pageSize * (page - 1) && n < pageSize * page)
+        $(this).show();
+    });
+  }
+  showPage(1);
+  $("#pagin li a").click(function () {
+    $("#pagin li a").removeClass("current");
+    $(this).addClass("current");
+    showPage(parseInt($(this).text()))
+  }); */
+  // end of pagination code
 
 })
