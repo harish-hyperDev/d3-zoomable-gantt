@@ -79,28 +79,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .range(["#00B9FA", "#F95002"])
       .interpolate(d3.interpolateHcl);
 
-    // start of pagination code
-    pageSize = 8;
-    var pageCount = Math.floor($(".svg div").length / pageSize);  // pagecount is in decimal numbers foramt 
-    console.log("pagination count ", pageCount)
-    for (var i = 0; i < pageCount; i++) {
-      $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li> ');
-    }
-    $("#pagin li").first().find("a").addClass("current")
-    showPage = function (page) {
-      $(".line-content").hide();
-      $(".line-content").each(function (n) {
-        if (n >= pageSize * (page - 1) && n < pageSize * page)
-          $(this).show();
-      });
-    }
-    showPage(1);
-    $("#pagin li a").click(function () {
-      $("#pagin li a").removeClass("current");
-      $(this).addClass("current");
-      showPage(parseInt($(this).text()))
-    });
-    // end of pagination code
+    
 
     makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
     drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight, gantChartIndex);
@@ -422,8 +401,10 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       .append("div")
         .attr("class", `gantt${gantt_i}`)
         // .attr("class", "ganttt-div")
-        .style("border", "1px solid black")
+        // .style("border", "1px solid black")
+        .style("box-shadow", "rgba(0, 0, 0, 0.35) 0px 5px 15px")   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         .style("margin", "10px")
+        .style("margin-bottom","20px")
         .style("border-radius", "7px")
         .style("padding", "20px")
         .append("svg")
@@ -439,5 +420,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     // h = h + 20;
 
   }
+
+  
 
 })
