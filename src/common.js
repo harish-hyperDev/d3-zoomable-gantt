@@ -398,19 +398,18 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       svg = d3.select(".svg")
         //.selectAll("svg")
         .append("div")
-        .attr("class", `gantt${gantt_i}`)
-        // .attr("class", "ganttt-div")
-        // .style("border", "1px solid black")
-        .style("box-shadow", "rgba(0, 0, 0, 0.35) 0px 5px 15px")   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        .style("margin", "10px")
-        .style("margin-bottom", "20px")
-        .style("border-radius", "7px")
-        .style("padding", "20px")
-        .append("svg")
-        .attr("width", w)
-        .attr("height", h)
-        .attr("class", `svg${gantt_i}`);
-
+          .attr("class", `gantt${gantt_i}`)
+          // .attr("class", "ganttt-div")
+          // .style("border", "1px solid black")
+          .style("box-shadow", "rgba(0, 0, 0, 0.35) 0px 5px 15px")   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+          .style("margin", "10px")
+          .style("margin-bottom", "20px")
+          .style("border-radius", "7px")
+          .style("padding", "20px")
+          .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+            .attr("class", `svg${gantt_i}`);
 
       let sequentialData = data.filter(d => d["SageCRMid"] === categories[gantt_i])
 
@@ -422,18 +421,79 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
   // start of pagination code
   pageSize = 10;
-  let pageCount = Math.floor(categories.length / pageSize);  // pagecount is in decimal numbers foramt 
+  let pageCount = Math.floor(categories.length / pageSize);  // pagecount is in decimal numbers format 
 
-  for (let i = 0; i < pageCount; i++) {
-    // $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
-    $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
+
+  $("#pagin").append('<li><a href="#">' + "Prev" + '</a></li>');
+  for (let i = 0; i < 9; i++) {
+    if(i === 0)
+      $("#pagin").append('<li><a class="current" href="#">' + (i + 1) + '</a></li>');
+    else
+      $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
   }
+  $("#pagin").append('<li><a href="#">' + "Next" + '</a></li>');
+
+  // handling on change events on clicking serial buttons in pagination
+  var selectedPagination = 1;
+  var scopeOfPagination = []
+  scopeOfPagination = $("#pagin li a").text().split("Prev").pop()
+  scopeOfPagination = scopeOfPagination.replace("Next", "")
+  scopeOfPagination = scopeOfPagination.match(/.{1,1}/g).map(d => parseInt(d))
+
+  console.log(scopeOfPagination)
+  
 
   $("#pagin li a").click(function () {
-    /* $("#pagin li a").removeClass("current");
-    $(this).addClass("current"); */
+
+    function dealPagination() {
+
+      scopeOfPagination = $("#pagin li a").text().split("Prev").pop()
+      scopeOfPagination = scopeOfPagination.replace("Next", "")
+      scopeOfPagination = scopeOfPagination.match(/.{1,1}/g).map(d => parseInt(d))
+
+      if(!scopeOfPagination.includes(selectedPagination)) {  // not !
+        let items = $('#pagin li a');
+        items = items.splice(1, items.length-2)
+
+        let dummySelectedPagination = selectedPagination
+        for(let i = items.length - 1; i >= 0; i--) {
+          $(items[i]).text(dummySelectedPagination.toString())
+          dummySelectedPagination--;
+        }
+      }
+
+      $(".svg div").remove()
+      $("#pagin li a").removeClass("current");
+
+      let item = $('#pagin li a');
+      for (let i = 0; i <= item.length; i++) {
+        if ($(item[i]).text() == selectedPagination) {
+          $(item[i]).addClass('current');
+        }
+      }
+
+      loopGantt((selectedPagination - 1)*10, (selectedPagination - 1)*10 + 10)
+    }
+
+    if($(this).text() === "Prev") {
+      selectedPagination--;
+      dealPagination()
+
+      return;
+    } else if ($(this).text() === "Next") {
+      selectedPagination++;
+      dealPagination()
+
+      return;
+    }
+
+    $("#pagin li a").removeClass("current");
+    $(this).addClass("current");
     $(".svg div").remove()
-    loopGantt(parseInt($(this).text())*10, (parseInt($(this).text())*10)+10)
+    
+    selectedPagination = parseInt($(this).text())
+
+    loopGantt( (selectedPagination - 1)*10, (selectedPagination - 1)*10 + 10)
   });
 
   loopGantt();
@@ -453,6 +513,7 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     $(this).addClass("current");
     showPage(parseInt($(this).text()))
   }); */
+  
   // end of pagination code
 
 })
