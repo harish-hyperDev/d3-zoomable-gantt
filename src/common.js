@@ -84,9 +84,6 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
     drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight, gantChartIndex);
     vertLabels(gap, topPadding, sidePadding, barHeight, colorScale, gantChartLabel);
-
-
-
   }
 
 
@@ -424,36 +421,42 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
   let pageCount = Math.floor(categories.length / pageSize);  // pagecount is in decimal numbers format 
 
 
-  $("#pagin").append('<li><a href="#">' + "Prev" + '</a></li>');
+  $("#pagin").append('<div><button class="prev" value="Prev"> ' + "Prev" + '</button></div>');
   for (let i = 0; i < 9; i++) {
     if(i === 0)
-      $("#pagin").append('<li><a class="current" href="#">' + (i + 1) + '</a></li>');
+      $("#pagin").append('<div><button value=' + (i + 1) + ' class="current"> ' + (i + 1) + '</button></div>');
     else
-      $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li>');
+      $("#pagin").append('<div><button value=' + (i + 1) + '>' + (i + 1) + '</a></li>');
   }
-  $("#pagin").append('<li><a href="#">' + "Next" + '</a></li>');
+  $("#pagin").append('<div><button class="next" value="Next"> ' + "Next" + '</button></div>');
+
+  // console.log($("#pagin div button").text().split("Prev").pop())
 
   // handling on change events on clicking serial buttons in pagination
   var selectedPagination = 1;
   var scopeOfPagination = []
-  scopeOfPagination = $("#pagin li a").text().split("Prev").pop()
+  scopeOfPagination = $("#pagin div button").text().split("Prev").pop()
   scopeOfPagination = scopeOfPagination.replace("Next", "")
   scopeOfPagination = scopeOfPagination.match(/.{1,1}/g).map(d => parseInt(d))
 
   console.log(scopeOfPagination)
   
 
-  $("#pagin li a").click(function () {
+  $("#pagin div button").click(function () {
 
     function dealPagination() {
 
-      scopeOfPagination = $("#pagin li a").text().split("Prev").pop()
+      scopeOfPagination = $("#pagin div button").text().split("Prev").pop()
+      console.log("One ", scopeOfPagination)
       scopeOfPagination = scopeOfPagination.replace("Next", "")
+      console.log("Two ", scopeOfPagination)
       scopeOfPagination = scopeOfPagination.match(/.{1,1}/g).map(d => parseInt(d))
+      console.log("Three ", scopeOfPagination)
 
       if(!scopeOfPagination.includes(selectedPagination)) {  // not !
-        let items = $('#pagin li a');
+        let items = $('#pagin div button');
         items = items.splice(1, items.length-2)
+        console.log("items ", items)
 
         let dummySelectedPagination = selectedPagination
         for(let i = items.length - 1; i >= 0; i--) {
@@ -463,9 +466,10 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       }
 
       $(".svg div").remove()
-      $("#pagin li a").removeClass("current");
+      $("#pagin div button").removeClass("current");
 
-      let item = $('#pagin li a');
+      let item = $('#pagin div button');
+      console.log("itemmm ", item)
       for (let i = 0; i <= item.length; i++) {
         if ($(item[i]).text() == selectedPagination) {
           $(item[i]).addClass('current');
@@ -475,19 +479,27 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
       loopGantt((selectedPagination - 1)*10, (selectedPagination - 1)*10 + 10)
     }
 
-    if($(this).text() === "Prev") {
+    // console.log($.trim($(this).text()))
+    if($.trim($(this).text()) === "Prev") {
+
+      console.log($(".current").text())
+      if($.trim($(".current").text()) === "1") {
+        return;
+      }
+
       selectedPagination--;
       dealPagination()
 
       return;
-    } else if ($(this).text() === "Next") {
+    } else if ($.trim($(this).text()) === "Next") {
+      console.log("here")
       selectedPagination++;
       dealPagination()
 
       return;
     }
 
-    $("#pagin li a").removeClass("current");
+    $("#pagin div button").removeClass("current");
     $(this).addClass("current");
     $(".svg div").remove()
     
@@ -495,6 +507,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
 
     loopGantt( (selectedPagination - 1)*10, (selectedPagination - 1)*10 + 10)
   });
+
+  
 
   loopGantt();
 
@@ -508,8 +522,8 @@ d3.csv("../data/SampleData_harish.csv", function (data) {
     });
   }
   showPage(1);
-  $("#pagin li a").click(function () {
-    $("#pagin li a").removeClass("current");
+  $("#pagin div button").click(function () {
+    $("#pagin div button").removeClass("current");
     $(this).addClass("current");
     showPage(parseInt($(this).text()))
   }); */
